@@ -1820,26 +1820,25 @@ header.header .nav-actions label.nav-actions__btn:hover svg {
   }
 
   /* 4. CONTROL DE APERTURA (Cuando el checkbox #btn-menu está activado) */
-  #btn-menu:checked ~ .navbar .main-menu {
-    opacity: 1;
-    visibility: visible;
-    transform: translateY(0);
-  }
+  .navbar #btn-menu:checked ~ .main-menu {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
 
-  /* 5. ANIMACIÓN DEL BOTÓN HAMBURGUESA (Se convierte en una "X" al abrirse) */
-  #btn-menu:checked ~ .navbar .btn-menu-trigger span:nth-child(1) {
-    transform: translateY(8px) rotate(45deg);
-    background-color: var(--accent); /* Cambia a dorado al abrir */
-  }
+.navbar #btn-menu:checked ~ .btn-menu-trigger span:nth-child(1) {
+  transform: translateY(8px) rotate(45deg);
+  background-color: var(--accent);
+}
 
-  #btn-menu:checked ~ .navbar .btn-menu-trigger span:nth-child(2) {
-    opacity: 0; /* Oculta la línea central */
-  }
+.navbar #btn-menu:checked ~ .btn-menu-trigger span:nth-child(2) {
+  opacity: 0;
+}
 
-  #btn-menu:checked ~ .navbar .btn-menu-trigger span:nth-child(3) {
-    transform: translateY(-8px) rotate(-45deg);
-    background-color: var(--accent);
-  }
+.navbar #btn-menu:checked ~ .btn-menu-trigger span:nth-child(3) {
+  transform: translateY(-8px) rotate(-45deg);
+  background-color: var(--accent);
+}
 
   /* Bloquear ligeramente el fondo para evitar scrolls extraños al estar abierto */
   body:has(#btn-menu:checked) {
@@ -2396,4 +2395,12 @@ header.header .nav-actions label.nav-actions__btn:hover svg {
   .contact-box-card p {
     font-size: 13.5px;
   }
+
+  .main-menu {
+  pointer-events: none;
+}
+
+.navbar #btn-menu:checked ~ .main-menu {
+  pointer-events: auto;
+}
 }

@@ -255,20 +255,28 @@ const swiper = new Swiper(".slider-wrapper", {
    INTERACTIVIDAD ADAPTADA PARA LA GRID DUAL
 ========================================= */
 
+/* =========================================
+   INTERACTIVIDAD ADAPTADA PARA LA GRID DUAL
+========================================= */
+
 const toggleBtn = document.getElementById("toggleNumbers");
 const numbersList = document.getElementById("numbersList");
 
-toggleBtn.addEventListener("click", () => {
+if (toggleBtn && numbersList) {
 
-  numbersList.classList.toggle("show");
+  toggleBtn.addEventListener("click", () => {
 
-  if (numbersList.classList.contains("show")) {
-    toggleBtn.textContent = "Hide global numbers";
-  } else {
-    toggleBtn.textContent = "View all global numbers";
-  }
+    numbersList.classList.toggle("show");
 
-});
+    if (numbersList.classList.contains("show")) {
+      toggleBtn.textContent = "Hide global numbers";
+    } else {
+      toggleBtn.textContent = "View all global numbers";
+    }
+
+  });
+
+}
 
 const contactForm = document.querySelector(".contact-form");
 
