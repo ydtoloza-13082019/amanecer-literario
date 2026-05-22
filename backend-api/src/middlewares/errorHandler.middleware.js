@@ -1,4 +1,6 @@
 function errorHandler(error, req, res, next) {
+  console.error(`[${req.method} ${req.originalUrl}]`, error);
+
   if (error.name === 'SequelizeUniqueConstraintError') {
     return res.status(409).json({
       error: true,

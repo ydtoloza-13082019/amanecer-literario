@@ -2,6 +2,7 @@ const express = require('express');
 const routes = require('./routes/index');
 const setupSwagger = require('./config/swagger');
 const errorHandler = require('./middlewares/errorHandler.middleware');
+const { sequelize } = require('./models');
 
 const app = express();
 
@@ -36,6 +37,22 @@ app.get('/health', (req, res) => {
     ok: true,
     message: 'Amanecer Literario API operativa.'
   });
+});
+
+app.get('/health/db', async (req, res) => {
+  try {
+    await sequelize.authenticate();
+    res.status(200).json({
+      ok: true,
+      message: 'Conexion a base de datos operativa.'
+    });
+  } catch (error) {
+    res.status(503).json({
+      ok: false,
+      message: 'No se pudo conectar a la base de datos.',
+      detail: error.message
+    });
+  }
 });
 
 app.use('/api', routes);
