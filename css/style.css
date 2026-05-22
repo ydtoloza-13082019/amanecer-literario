@@ -1,0 +1,2399 @@
+/* ==========================================================================
+   1. VARIABLES, CONFIGURACIÓN GENERAL Y RESET
+   ========================================================================== */
+:root {
+  --bg: #f5efe3;
+  --surface: #ffffff;
+  --surface-soft: #f8f4ec;
+  --primary: #2f6b4f;
+  --primary-dark: #214b38;
+  --primary-light: #d9e8de;
+  --accent: #b9925a;
+  --text: #1d2a22;
+  --text-soft: #5c6c62;
+  --border: #d8ddd4;
+  --white: #ffffff;
+  --shadow-sm: 0 8px 18px rgba(33, 75, 56, 0.06);
+  --shadow-md: 0 14px 30px rgba(33, 75, 56, 0.1);
+  --radius-sm: 12px;
+  --radius-md: 18px;
+  --radius-lg: 28px;
+  --radius-pill: 999px;
+  --container: 1180px;
+  --transition: all 0.28s ease;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--text);
+  background: linear-gradient(180deg, #f7f1e8 0%, #f3ecdf 100%);
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+  transition: var(--transition);
+}
+
+button,
+input,
+textarea {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  background: none;
+}
+
+.container {
+  width: min(92%, var(--container));
+  margin: 0 auto;
+}
+
+
+/* ==========================================================================
+   2. COMPONENTE: HEADER, NAVBAR, LOGO Y BUSCADOR
+   ========================================================================== */
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background: rgba(255, 255, 255, 0.94);
+  border-bottom: 1px solid rgba(47, 107, 79, 0.1);
+  backdrop-filter: blur(10px);
+}
+
+.navbar__content {
+  display: grid;
+  grid-template-columns: 260px 1fr auto;
+  align-items: center;
+  gap: 22px;
+  padding: 18px 0;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.brand__logo {
+  width: 100px;
+  height: 70px;
+  box-shadow: var(--shadow-sm);
+}
+
+.brand__text h1 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 34px;
+  line-height: 1;
+  color: var(--primary-dark);
+}
+
+.brand__text span {
+  display: block;
+  margin-top: 4px;
+  font-size: 14px;
+  color: var(--text-soft);
+}
+
+.searchbar {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  max-width: 620px;
+  justify-self: center;
+  background: var(--white);
+  border: 1px solid #1b1b1b;
+  border-radius: var(--radius-pill);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+}
+
+.searchbar input {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: transparent;
+  padding: 14px 18px;
+  color: var(--primary-dark);
+}
+
+.searchbar input::placeholder {
+  color: #6b6b6b;
+}
+
+.searchbar button {
+  width: 70px;
+  min-width: 70px;
+  height: 54px;
+  padding: 0;
+  border: none;
+  border-left: 1px solid rgba(255, 255, 255, 0.15);
+  background: var(--primary-dark);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.searchbar button img {
+  width: 32px;
+  height: 32px;
+  max-width: 32px;
+  max-height: 32px;
+  object-fit: contain;
+  display: block;
+}
+
+
+/* ==========================================================================
+   3. COMPONENTE: MENÚ PRINCIPAL
+   ========================================================================== */
+.main-menu {
+  background: var(--white);
+  border-top: 1px solid rgba(47, 107, 79, 0.08);
+  border-bottom: 1px solid rgba(47, 107, 79, 0.08);
+}
+
+.main-menu_content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 28px;
+  padding: 14px 0;
+  overflow-x: auto;
+}
+
+.main-menu_content a {
+  position: relative;
+  white-space: nowrap;
+  font-weight: 500;
+  color: var(--text);
+  padding: 0 18px;
+  border-right: 1px solid rgba(47, 107, 79, 0.25);
+  text-decoration: none;
+}
+
+.main-menu_content a:last-child {
+  border-right: none;
+}
+
+.main-menu_content a:hover {
+  color: var(--primary);
+  transform: scale(1.2);
+}
+
+
+/* ==========================================================================
+   4. COMPONENTE: BARRA LATERAL - CATÁLOGO DE CATEGORÍAS
+   ========================================================================== */
+.boton-catalogo-trigger {
+  cursor: pointer;
+  font-weight: 500;
+  padding: 0 18px;
+  border-right: 1px solid rgba(47, 107, 79, 0.25);
+  transition: color 0.3s ease;
+}
+
+.boton-catalogo-trigger:hover {
+  color: var(--primary);
+  transform: scale(1.2);
+}
+
+#btn-catalogo {
+  display: none;
+}
+#btn-menu {
+  display: none;
+}
+
+#btn-catalogo:checked ~ .container-catalogo {
+  visibility: visible;
+  opacity: 1;
+}
+
+#btn-catalogo:checked ~ .container-catalogo .cont-catalogo {
+  transform: translateX(0);
+}
+
+.container-catalogo {
+  position: fixed;
+  width: 100%;
+  height: 100vh;
+  top: 0;
+  left: 0;
+  z-index: 2000;
+  visibility: hidden;
+  opacity: 0;
+  transition: all 400ms ease;
+}
+
+.cont-catalogo {
+  width: 100%;
+  max-width: 280px;
+  background: #1d2a22;
+  height: 100vh;
+  position: relative;
+  z-index: 2001;
+  transform: translateX(-100%);
+  transition: all 400ms ease;
+  padding: 40px 20px;
+}
+
+.cont-catalogo h3 {
+  color: white;
+  margin-bottom: 20px;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 24px;
+}
+
+.cont-catalogo ul {
+  list-style: none;
+  padding: 0;
+}
+
+.cont-catalogo ul li a {
+  display: block;
+  padding: 12px 0;
+  color: #c7c7c7;
+  text-decoration: none;
+  border-bottom: 1px solid #333;
+  transition: all 300ms ease;
+}
+
+.cont-catalogo ul li a:hover {
+  color: white;
+  padding-left: 10px;
+  background: var(--primary);
+}
+
+.overlay-cerrar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 1999;
+  cursor: pointer;
+}
+
+.icon-equis {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  color: white;
+  font-size: 22px;
+  cursor: pointer;
+  z-index: 2002;
+}
+
+
+/* ==========================================================================
+   5. COMPONENTE: BARRA LATERAL - MI CUENTA / REGISTRO
+   ========================================================================== */
+   .form-group label {
+    display: block;
+    margin-bottom: 7px;
+    font-size: 14px;
+    font-weight: 600;
+}
+#btn-cuenta {
+    display: none;
+}
+.btn-cuenta-trigger {
+    display: inline-block;
+    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    padding: 10px 20px;
+    border-radius: 50px;
+    border: 1px solid var(--border);
+    background-color: var(--white);
+    color: var(--primary-dark);
+    transition: var(--transition);
+    user-select: none;
+    cursor: pointer;
+}
+
+.btn-cuenta-trigger:hover {
+    background-color: var(--primary);
+    color: var(--white);
+    border-color: var(--primary-dark);
+    box-shadow: var(--shadow-sm);
+    transform: translateY(-1px);
+}
+
+.btn-cuenta-trigger:active {
+    background-color: var(--primary-dark);
+    transform: translateY(1px);
+    box-shadow: none;
+}
+
+.sidebar-cuenta {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 380px;
+    max-width: 85%;
+    height: 100vh;
+    background-color: var(--text);
+    z-index: 2010;
+    box-shadow: -5px 0 25px rgba(33, 75, 56, 0.2);
+    transform: translateX(100%);
+    transition: transform var(--transition);
+    display: flex;
+    flex-direction: column;
+    padding: 30px 24px; 
+    box-sizing: border-box;
+    font-family: 'Inter', sans-serif;
+    
+}
+
+#btn-cuenta:checked ~ .sidebar-cuenta {
+    transform: translateX(0);
+}
+
+.cuenta-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(29, 42, 34, 0.5);
+    z-index: 2009;
+    opacity: 0;
+    visibility: hidden;
+    transition: var(--transition);
+}
+
+#btn-cuenta:checked ~ .cuenta-overlay {
+    opacity: 1;
+    visibility: visible;
+}
+
+.sidebar-header {
+    padding: 0 0 15px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.sidebar-header h3 {
+    margin: 0;
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 700;
+    color: var(--white);
+}
+
+.btn-cerrar {
+    font-size: 26px;
+    cursor: pointer;
+    color: var(--surface-soft);
+    line-height: 1;
+    transition: color var(--transition);
+}
+
+.btn-cerrar:hover {
+    color: var(--white);
+}
+
+.sidebar-content {
+    padding: 20px 0 0 0;
+    overflow-y: auto;
+    flex: 1;
+}
+
+.sidebar-content::-webkit-scrollbar {
+    width: 6px;
+}
+.sidebar-content::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: var(--radius-pill);
+}
+
+.nav-tabs {
+    display: flex;
+    list-style: none;
+    padding: 0;
+    margin: 0 0 25px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.tab-item {
+    flex: 1;
+    text-align: center;
+}
+
+.tab-link {
+    display: block;
+    padding: 12px 0;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-soft);
+    text-decoration: none;
+    transition: color var(--transition);
+    cursor: pointer;
+}
+
+.tab-item.active .tab-link,
+.tab-link:hover {
+    color: var(--white);
+    border-bottom: 2px solid var(--primary);
+    margin-bottom: -1px;
+}
+.tab-pane {
+    display: none;
+}
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 20px;
+}
+
+.control-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--white);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.form-control {
+    width: 100%;
+    padding: 13px 14px;
+    background: rgba(255, 255, 255, 0.06); 
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: var(--radius-sm);
+    font-size: 15px;
+    color: var(--white);
+    outline: none;
+    transition: var(--transition);
+    box-sizing: border-box;
+}
+
+.form-control::placeholder {
+    color: var(--text-soft);
+}
+
+.form-control:focus {
+    border-color: var(--accent);
+    background: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 0 0 4px rgba(185, 146, 90, 0.15);
+}
+
+.checkbox-group {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 14px;
+    color: var(--surface-soft);
+    line-height: 1.4;
+    cursor: pointer;
+}
+
+.checkbox-group input[type="checkbox"] {
+    margin-top: 3px;
+    accent-color: var(--accent);
+}
+
+.checkbox-group a {
+    color: var(--white);
+    text-decoration: underline;
+}
+
+.btn-submit {
+    width: 100%;
+    padding: 13px;
+    background-color: var(--primary);
+    color: var(--white);
+    border: none;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 15px;
+    transition: var(--transition);
+    box-sizing: border-box;
+    box-shadow: var(--shadow-sm);
+    margin-top: 10px;
+}
+
+.btn-submit:hover {
+    background-color: var(--primary-dark);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
+}
+
+header.header .nav-actions label.nav-actions__btn {
+  background-color: var(--white) ;
+  color: var(--primary) ;
+  padding: 8px 22px ;
+  border-radius: var(--radius-pill) ;
+  font-weight: 600 ;
+  font-size: 14px ;
+  text-transform: none ;
+  display: inline-flex ;
+  align-items: center ;
+  gap: 8px ;
+  cursor: pointer;
+  box-shadow: var(--shadow-sm);
+  border: 2px solid var(--white);
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease ;
+}
+
+header.header .nav-actions label.nav-actions__btn:hover {
+  background-color: var(--primary) ;
+  color: var(--white);
+  border-color: var(--primary) ;
+  box-shadow: var(--shadow-md);
+}
+
+header.header .nav-actions label.nav-actions__btn:hover svg {
+  stroke: var(--white);
+  fill: transparent ;
+}
+
+
+/* ==========================================================================
+   6. BLOQUES COMPARTIDOS: ELEMENTOS COMUNES, BADGES Y ESTRUCTURAS DE FORMULARIOS
+   ========================================================================== */
+.section {
+  padding: 28px 0 22px;
+}
+
+.section-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  gap: 20px;
+  margin-bottom: 22px;
+  flex-wrap: wrap;
+}
+
+.section-title h2 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 40px;
+  color: var(--primary-dark);
+}
+
+.section-title p {
+  max-width: 620px;
+  color: var(--text-soft);
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: fit-content;
+  padding: 7px 12px;
+  border-radius: var(--radius-pill);
+  background: rgba(255, 255, 255, 0.18);
+  color: var(--white);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(6px);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+}
+
+.info-card,
+.book-card,
+.comment-card,
+.banner-card {
+  background: var(--surface);
+  border: 1px solid rgba(47, 107, 79, 0.08);
+  border-radius: 22px;
+  box-shadow: var(--shadow-sm);
+}
+
+.info-card {
+  padding: 24px;
+}
+
+.info-card h3,
+.comment-card h3,
+.book-card__content h3,
+.banner-card__content h3 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 28px;
+  color: var(--primary-dark);
+}
+
+.small-text {
+  font-size: 14px;
+  color: var(--text-soft);
+}
+
+.books-grid,
+.comments-grid,
+.banners-grid,
+.footer__grid {
+  display: grid;
+  gap: 20px;
+}
+.contact-info-list{
+  margin-top: 12px; 
+  display: flex; 
+  flex-direction:column; gap: 6px;
+}
+.form-grid {
+  display: grid;
+  gap: 14px;
+}
+
+.form-grid label {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--primary-dark);
+}
+
+.form-grid input,
+.form-grid textarea {
+  width: 100%;
+  border: 1px solid var(--border);
+  background: #fff;
+  color: var(--text);
+  border-radius: 14px;
+  padding: 13px 14px;
+  outline: none;
+  transition: var(--transition);
+}
+
+.form-grid input::placeholder,
+.form-grid textarea::placeholder {
+  color: #8b8b8b;
+}
+
+.form-grid textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+.form-grid input:focus,
+.form-grid textarea:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 4px rgba(47, 107, 79, 0.12);
+}
+
+.map-container {
+  margin-top: 12px;
+}
+/* ==========================================================================
+   7. SECCIÓN ESPECÍFICA: PÁGINA DE INICIO (INDEX) / HERO Y CARRUSELES
+   ========================================================================== */
+.hero {
+  padding: 34px 0 18px;
+}
+
+.hero-banner {
+  position: relative;
+  width: 85%;
+  min-height: 460px;
+  margin: 0 auto;
+  overflow: hidden;
+  border-radius: 30px;
+  box-shadow: var(--shadow-md);
+  background: #d9d9d9;
+}
+
+.hero-banner img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.hero-banner__overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 30px;
+  background: linear-gradient(180deg, rgba(12, 35, 24, 0.08), rgba(12, 35, 24, 0.7));
+}
+
+.hero-banner__content {
+  max-width: 620px;
+  color: var(--white);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.hero-banner__content h2 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 52px;
+  line-height: 1;
+  margin: 12px 0;
+}
+
+.hero-banner__content p {
+  max-width: 54ch;
+}
+
+.hero-banner__actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 18px;
+  justify-content: center;
+}
+
+.hero-banner__actions .btn {
+  background-color: var(--white);
+  color: var(--primary);
+  padding: 12px 24px;
+  border-radius: 50px;
+  font-weight: 600;
+  font-size: 15px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow-sm);
+  cursor: pointer;
+  border: 2px solid var(--white);
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+.hero-banner__actions .btn:hover {
+  background-color: var(--primary);
+  color: var(--white);
+  border-color: var(--primary);
+  box-shadow: var(--shadow-md);
+  opacity: 1;
+}
+
+.banner-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 48px;
+  height: 48px;
+  background-color: rgba(255, 255, 255, 0.85);
+  color: var(--primary) ;
+  border: none ;
+  border-radius: var(--radius-pill) ;
+  font-size: 22px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 10;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s ease;
+}
+
+.banner-btn--prev {
+  left: 20px;
+}
+
+.banner-btn--next {
+  right: 20px;
+}
+
+.banner-btn:hover {
+  background-color: var(--primary);
+  color: var(--white) ;
+  transform: translateY(-50%) scale(1.1);
+}
+
+/* Carrusel de Libros */
+.section-title {
+  display: flex;
+  flex-direction: column;
+  align-items: center; 
+  text-align: center;  
+  margin-bottom: 40px;
+}
+
+.section-title h2 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 32px;
+  color: var(--primary-dark);
+}
+
+.card-slider {
+  padding: 0 40px;
+  position: relative;
+}
+
+.slider-wrapper{
+  overflow: hidden;
+  max-width: var(--container);
+  margin: 0 auto 40px;
+}
+
+.card-slider .card-item{
+  user-select: none;
+  background: var(--surface);
+  padding: 16px;
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  height: auto;
+}
+
+.card-slider .card-item .card-image{
+  width: 100%;
+  height: 240px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1px solid rgba(47, 107, 79, 0.1);
+}
+
+.card-slider .card-item .card-title{
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 20px;
+  color: var(--primary-dark);
+  margin: 12px 0 6px;
+  line-height: 1.2;
+}
+
+.card-slider .card-description {
+  font-size: 13px;
+  color: var(--text-soft);
+  line-height: 1.4;
+}
+
+.card-slider .slider-button {
+  color: var(--primary);
+  margin-top: -40px;
+  transition: 0.3 s ease;
+}
+
+.card-slider .slider-button:hover {
+  color: var(--primary-dark);
+}
+
+.card-slider .swiper-pagination-bullet{
+  width: 12px;
+  height: 12px;
+  background: var(--primary);
+}
+
+.books-grid {
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+}
+
+.book-card {
+  overflow: hidden;
+}
+
+.book-card img {
+  width: 100%;
+  height: 280px;
+  object-fit: cover;
+}
+
+.book-card__content {
+  padding: 18px;
+}
+
+.book-card__content h3 {
+  margin-top: 10px;
+  margin-bottom: 6px;
+  font-size: 26px;
+}
+
+.book-card__meta {
+  font-size: 14px;
+  color: var(--text-soft);
+}
+
+
+/* ==========================================================================
+   8. SECCIÓN ESPECÍFICA: PÁGINA DE ¿QUIÉNES SOMOS? (ABOUT)
+   ========================================================================== */
+.about-page {
+  padding: 60px 0 80px 0;
+  background-color: var(--bg);
+}
+
+.about-header {
+  text-align: center;
+  max-width: 100%;
+  margin: 0 auto;
+  color: var(--primary-dark);
+  background-color: var(--bg);
+  padding: 40px 0;
+  border-radius:50px;
+}
+
+.about-header h1 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 44px;
+  color: var(--primary-dark);
+  margin-bottom: 16px;
+  font-weight: 700;
+}
+
+.about-header p {
+  font-size: 18px;
+  color: var(--primary-dark);
+  line-height: 1.8;
+}
+
+.about-card {
+  background-color: var(--surface);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--border);
+  padding: 60px 80px;
+  max-width: var(--container);
+  margin: 0 auto;
+}
+
+.about-row {
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  gap: 40px;
+  align-items: start;
+  padding: 40px 0;
+  border-bottom: 1px dashed var(--border);
+}
+
+.about-row:first-of-type {
+  padding-top: 0;
+}
+
+.about-row:last-of-type {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.about-icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-top: 6px;
+}
+
+.about-icon img {
+  width: 80px;
+  height: auto;
+  object-fit: contain;
+  filter: brightness(0) saturate(100%) invert(24%) sepia(35%) saturate(723%) hue-rotate(101deg) brightness(91%) contrast(93%);
+}
+
+.about-content .title-line {
+  display: flex;
+  align-items: center;
+  margin-bottom: 24px;
+  width: 100%;
+}
+
+.about-content .title-line h2 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 32px;
+  color: var(--primary);
+  font-weight: 700;
+  white-space: nowrap;
+  padding-left: 15px;
+  padding-right: 20px;
+}
+
+.about-content .title-line::after {
+  content: "";
+  flex: 1;
+  height: 2px;
+  background-color: var(--primary);
+  opacity: 0.4;
+}
+
+.about-content ul {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.about-content ul li {
+  font-size: 16px;
+  color: var(--text-soft);
+  line-height: 1.7;
+  position: relative;
+  padding-left: 28px;
+}
+
+.about-content ul li::before {
+  content: "";
+  position: absolute;
+  left: 4px;
+  top: 9px;
+  width: 8px;
+  height: 8px;
+  background-color: var(--accent);
+  transform: rotate(45deg);
+  background-color: var(--primary-dark); 
+  transform: rotate(45deg);
+}
+
+.about-content ul li strong {
+  color: var(--text);
+  font-weight: 600;
+  color: var(--primary-dark);
+}
+
+
+/* ==========================================================================
+   9. SECCIÓN ESPECÍFICA: PRÓXIMAS FERIAS Y COMENTARIOS
+   ========================================================================== */
+.comments-grid {
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+}
+
+.comment-card {
+  padding: 22px;
+}
+
+.comment-card p {
+  margin-top: 10px;
+}
+
+.comment-card .comment-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+  text-align: center;
+}
+
+.comment-card .comment-avatar {
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 3px solid rgba(47, 107, 79, 0.25);
+  flex-shrink: 0;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+}
+
+.comment-card .comment-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.comment-card .comment-user-info h3 {
+  margin: 0;
+  font-size: 30px;
+  color: var(--primary-dark);
+}
+
+.comment-card .small-text {
+  font-style: italic;
+  font-size: 17px;
+  line-height: 2.0;
+  color: var(--text-soft);
+  margin: 0;
+  text-align: center;
+}
+
+.banners-grid {
+  width: 85%;
+  margin: 0 auto;
+  grid-template-columns: 1fr;
+}
+
+.banner-card {
+  overflow: hidden;
+}
+
+.banner-card img {
+  width: 100%;
+  height: 280px;
+  object-fit: cover;
+}
+
+.banner-card__content {
+  padding: 18px;
+}
+
+.banner-card__content h3 {
+  margin-top: 10px;
+  margin-bottom: 6px;
+  font-size: 26px;
+}
+
+
+/* ==========================================================================
+   10. SECCIÓN ESPECÍFICA: PÁGINA DE CONTACTO Y FORMULARIO
+   ========================================================================== */
+.contact-layout {
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  gap: 22px;
+  align-items: start;
+}
+
+.contact-left {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+.hero-contact {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--radius-md);
+  min-height: 285px;
+  box-shadow: var(--shadow-md);
+}
+
+.hero-contact img {
+  width: 100%;
+  height: 50%;
+  object-fit: cover;
+}
+
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  padding: 50px;
+  background:
+    linear-gradient(
+      90deg,
+      rgba(10, 28, 20, 0.96) 0%,
+      rgba(17, 64, 44, 0.86) 36%,
+      rgba(0, 0, 0, 0.08) 74%
+    );
+}
+
+.hero-content {
+  max-width: 420px;
+  color: var(--white);
+}
+
+.hero-content h1 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 4rem;
+  line-height: 1;
+  margin-bottom: 18px;
+  font-weight: 600;
+}
+
+.hero-content p {
+  font-size: 1.05rem;
+  line-height: 1.7;
+  color: rgba(255,255,255,0.88);
+}
+
+.contact-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 22px;
+}
+
+.contact-card {
+  position: relative;
+  overflow: visible;
+  background: rgba(255,255,255,0.74);
+  backdrop-filter: blur(5px);
+  border: 1px solid rgba(255,255,255,0.65);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  padding: 78px 34px 34px;
+  min-height: 360px;
+  text-align: center;
+  transition: var(--transition);
+}
+
+.contact-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+}
+
+.contact-card h2 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 2rem;
+  line-height: 1.1;
+  margin-bottom: 18px;
+  color: #111;
+}
+
+.contact-card p {
+  color: #222;
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+
+.icon-circle {
+  position: absolute;
+  top: -36px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 74px;
+  height: 74px;
+  border-radius: 50%;
+  background: #edf4ef;
+  color: var(--primary-dark);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.8rem; 
+  box-shadow:
+    0 10px 22px rgba(0,0,0,0.08),
+    inset 0 0 0 1px rgba(47,107,79,0.08);
+}
+
+.phone-link {
+  display: inline-block;
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--primary-dark);
+  margin-bottom: 16px;
+  text-decoration: none;
+}
+
+.text-button {
+  border: none;
+  background: none;
+  color: var(--primary-dark);
+  font-weight: 700;
+  cursor: pointer;
+  margin-bottom: 24px;
+  text-decoration: underline;
+}
+
+.number-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 14px;
+  padding: 4px 0;
+}
+
+.number-item span {
+  color: #111;
+}
+
+.number-item a {
+  color: var(--primary-dark);
+}
+
+.social-icons-row {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 30px;
+}
+
+.social-icon-link {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #111;
+  transition: var(--transition);
+}
+
+.social-icon-link svg {
+  width: 19px;
+  height: 19px;
+}
+
+.social-icon-link:hover {
+  background: var(--primary);
+  color: var(--white);
+  transform: translateY(-3px);
+}
+
+.contact-form-wrapper {
+  position: relative;
+}
+
+.contact-form-card {
+  position: relative;
+  background: rgba(255,255,255,0.78);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(5px);
+  border: 1px solid rgba(255,255,255,0.65);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  padding: 78px 28px 28px;
+  text-align: center;
+}
+
+.contact-form-card h2 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 2.3rem;
+  line-height: 1.1;
+  margin-bottom: 14px;
+}
+
+.contact-form-card p {
+  font-size: 1.05rem;
+  line-height: 1.6;
+  margin-bottom: 16px;
+}
+
+.form-mini-text {
+  display: block;
+  color: #333;
+  line-height: 1.6;
+  margin-bottom: 24px;
+}
+
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.form-group {
+  text-align: left;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 7px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.form-group input,
+.form-group textarea {
+  width: 100%;
+  border: 1px solid #d2d2d2;
+  background: rgba(255,255,255,0.86);
+  border-radius: 10px;
+  padding: 14px;
+  font-size: 15px;
+  transition: var(--transition);
+}
+
+.form-group textarea {
+  min-height: 95px;
+  resize: none;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: var(--primary);
+  background: var(--white);
+  box-shadow: 0 0 0 4px rgba(47,107,79,0.12);
+}
+
+.primary-button {
+  width: 100%;
+  margin-top: 4px;
+  border: none;
+  border-radius: 12px;
+  padding: 15px;
+  background:
+    linear-gradient(
+      90deg,
+      var(--primary-dark),
+      var(--primary)
+    );
+  color: var(--white);
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.primary-button:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+
+/* ==========================================================================
+   11. COMPONENTE: PIE DE PÁGINA (FOOTER)
+   ========================================================================== */
+.footer {
+  margin-top: 40px;
+  background: linear-gradient(180deg, #244734 0%, #183325 100%);
+  color: #eef5f1;
+  padding: 44px 0 22px;
+}
+
+.footer h3 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 28px;
+  color: #fff;
+}
+
+.footer p,
+.footer a {
+  color: rgba(255, 255, 255, 0.86);
+  margin-top: 12px;
+}
+
+.footer a:hover {
+  color: #d7e8dc;
+}
+
+.footer__grid {
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.footer__grid > div {
+  padding-right: 8px;
+}
+
+.footer iframe {
+  width: 100%;
+  min-height: 220px;
+  border: 0;
+  border-radius: 18px;
+  
+}
+
+.footer-bottom {
+  margin-top: 24px;
+  padding-top: 18px;
+  border-top: 1px solid rgba(255, 255, 255, 0.14);
+  text-align: center;
+  color: rgba(255, 255, 255, 0.82);
+  font-size: 14px;
+}
+
+
+/* ==========================================================================
+   12. MARGENES Y ESPACIADOS AUXILIARES
+   ========================================================================== */
+.mt-8 {
+  margin-top: 8px;
+}
+
+.mt-10 {
+  margin-top: 10px;
+}
+
+.mt-12 {
+  margin-top: 12px;
+}
+
+.mt-14 {
+  margin-top: 14px;
+}
+
+.mt-18 {
+  margin-top: 18px;
+}
+/* ==========================================================================
+   DISEÑO ÚNICO E INTERACTIVO: SECCIÓN PRÓXIMAS FERIAS
+   ========================================================================== */
+
+/* Fondo general y espaciado de la sección */
+.fairs-section {
+  padding: 80px 0;
+  background: radial-gradient(circle at top right, rgba(217, 232, 222, 0.4) 0%, transparent 60%);
+}
+
+/* Encabezado Estilizado y Llamativo */
+.fairs-header {
+  text-align: center;
+  margin-bottom: 60px;
+  position: relative;
+}
+
+.fairs-subtitle {
+  display: inline-block;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--accent);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: 8px;
+}
+
+.fairs-main-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 48px;
+  color: var(--primary-dark);
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+/* Decorador orgánico central debajo del título */
+.fairs-decorator {
+  width: 80px;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, var(--accent), transparent);
+  margin: 18px auto 0;
+  position: relative;
+}
+
+.fairs-decorator::before {
+  content: "✦";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #f6f0e6; /* Color crema de fondo para cortar la línea */
+  padding: 0 8px;
+  color: var(--accent);
+  font-size: 12px;
+}
+
+/* Grid dinámico con efecto mampostería moderno */
+.fairs-modern-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 30px;
+  align-items: stretch;
+}
+
+/* Tarjeta Única de Feria (Estilo Caja de Cristal Editorial) */
+.fair-card-modern {
+  background: var(--surface);
+  border: 1px solid rgba(47, 107, 79, 0.08);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+/* INTERACCIÓN HOVER: Elevación flotante y brillo sutil de borde */
+.fair-card-modern:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 22px 40px rgba(33, 75, 56, 0.12);
+  border-color: rgba(185, 146, 90, 0.4); /* Brillo dorado en el borde */
+}
+
+/* Contenedor de Imagen de la Tarjeta */
+.fair-img-box {
+  width: 100%;
+  height: 240px;
+  overflow: hidden;
+  position: relative;
+  background-color: var(--primary-dark);
+}
+
+.fair-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1), filter 0.4s ease;
+}
+
+/* INTERACCIÓN HOVER: Zoom sutil y aclarado cinematográfico */
+.fair-card-modern:hover .fair-image {
+  transform: scale(1.08);
+}
+
+/* Badges / Etiquetas Flotantes */
+.fair-badge {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  z-index: 5;
+  padding: 6px 14px;
+  background: rgba(33, 75, 56, 0.85);
+  backdrop-filter: blur(8px);
+  color: var(--white);
+  border-radius: var(--radius-pill);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  transition: all 0.3s ease;
+}
+
+/* Estilo destacado exclusivo (Filtro Dorado) */
+.fair-badge.badge-highlight {
+  background: linear-gradient(135deg, var(--accent), #9e7843);
+  box-shadow: 0 4px 10px rgba(185, 146, 90, 0.3);
+}
+
+/* Cuerpo de la tarjeta */
+.fair-body {
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+/* Metadatos (Fecha y Lugar ordenados simétricamente) */
+.fair-meta {
+  display: flex;
+  gap: 16px;
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 14px;
+  flex-wrap: wrap;
+}
+
+.fair-date {
+  color: var(--accent);
+  background: rgba(185, 146, 90, 0.08);
+  padding: 4px 10px;
+  border-radius: var(--radius-sm);
+}
+
+.fair-location {
+  color: var(--text-soft);
+  background: var(--surface-soft);
+  padding: 4px 10px;
+  border-radius: var(--radius-sm);
+}
+
+/* Título de la tarjeta literaria */
+.fair-card-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 26px;
+  color: var(--primary-dark);
+  line-height: 1.25;
+  margin-bottom: 12px;
+  font-weight: 700;
+  transition: color 0.3s ease;
+}
+
+.fair-card-modern:hover .fair-card-title {
+  color: var(--primary);
+}
+
+/* Texto descriptivo */
+.fair-text {
+  font-size: 15px;
+  color: var(--text-soft);
+  line-height: 1.6;
+  margin-bottom: 24px;
+  display: -webkit-box;
+  -webkit-line-clamp: 3; /* Corta elegantemente el texto si es muy largo */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Botón de acción interactivo (Estilo Link Premium con flecha deslizante) */
+.fair-btn {
+  margin-top: auto; /* Empuja el botón siempre al fondo de la tarjeta */
+  align-self: flex-start;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--primary-dark);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  position: relative;
+  padding-bottom: 4px;
+  transition: color 0.3s ease;
+}
+
+/* Línea animada inferior estilo firma */
+.fair-btn::after {
+  content: ' →';
+  display: inline-block;
+  transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.fair-btn::before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 40px;
+  height: 2px;
+  background-color: var(--accent);
+  transition: width 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+/* INTERACCIÓN HOVER: La flecha se desliza hacia adelante y la línea se expande */
+.fair-card-modern:hover .fair-btn {
+  color: var(--accent);
+}
+
+.fair-card-modern:hover .fair-btn::after {
+  transform: translateX(6px);
+}
+
+.fair-card-modern:hover .fair-btn::before {
+  width: 100%;
+}
+
+
+/* ==========================================================================
+   SISTEMA DE MENÚ HAMBURGUESA INTERACTIVO (TODAS LAS PÁGINAS)
+   ========================================================================== */
+
+/* Por defecto en escritorio, ocultamos el botón de hamburguesa */
+.btn-menu-trigger {
+  display: none;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 26px;
+  height: 18px;
+  cursor: pointer;
+  z-index: 2005;
+}
+
+.btn-menu-trigger span {
+  width: 100%;
+  height: 2px;
+  background-color: var(--primary-dark);
+  border-radius: 2px;
+  transition: transform 0.3s ease, opacity 0.3s ease, background-color 0.3s ease;
+}
+
+/* --- ADAPTACIÓN PARA DISPOSITIVOS MÓVILES y TABLETS --- */
+@media (max-width: 768px) {
+  
+  /* 1. Hacer visible el botón de tres líneas en la barra superior */
+  .btn-menu-trigger {
+    display: flex;
+  }
+
+  /* 2. Transformar el menú principal en un panel desplegable vertical a pantalla completa */
+  .main-menu {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background-color: rgba(245, 239, 227, 0.98); /* Color crema de la página con ligera transparencia */
+    z-index: 2000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    /* Estado inicial: oculto y desplazado hacia arriba */
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-20px);
+    transition: opacity 0.35s ease, visibility 0.35s ease, transform 0.35s ease;
+  }
+
+  /* 3. Reacomodar los enlaces del menú verticalmente */
+  .main-menu_content {
+    flex-direction: column;
+    gap: 24px;
+    width: 100%;
+    padding: 40px 20px;
+    text-align: center;
+  }
+
+  .main-menu_content a,
+  .boton-catalogo-trigger {
+    font-size: 22px; /* Enlaces más grandes y fáciles de tocar */
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 700;
+    color: var(--primary-dark);
+    display: block;
+    width: 100%;
+    padding: 10px 0;
+  }
+
+  /* 4. CONTROL DE APERTURA (Cuando el checkbox #btn-menu está activado) */
+  #btn-menu:checked ~ .navbar .main-menu {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+
+  /* 5. ANIMACIÓN DEL BOTÓN HAMBURGUESA (Se convierte en una "X" al abrirse) */
+  #btn-menu:checked ~ .navbar .btn-menu-trigger span:nth-child(1) {
+    transform: translateY(8px) rotate(45deg);
+    background-color: var(--accent); /* Cambia a dorado al abrir */
+  }
+
+  #btn-menu:checked ~ .navbar .btn-menu-trigger span:nth-child(2) {
+    opacity: 0; /* Oculta la línea central */
+  }
+
+  #btn-menu:checked ~ .navbar .btn-menu-trigger span:nth-child(3) {
+    transform: translateY(-8px) rotate(-45deg);
+    background-color: var(--accent);
+  }
+
+  /* Bloquear ligeramente el fondo para evitar scrolls extraños al estar abierto */
+  body:has(#btn-menu:checked) {
+    overflow: hidden;
+  }
+}
+
+/* ==========================================================================
+   12. RESPONSIVE DESIGN INDEX.HTML
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   DISPOSITIVOS MEDIANOS (Tablets - Menor a 992px)
+   -------------------------------------------------------------------------- */
+@media screen and (max-width: 992px) {
+  .navbar__content {
+    grid-template-columns: 1fr auto; 
+    row-gap: 16px;
+    padding: 14px 0;
+  }
+
+  /* La barra de búsqueda baja a una línea propia en tablets para no aplastarse */
+  .searchbar {
+    grid-column: 1 / -1;
+    max-width: 100%;
+    order: 3; 
+    margin-top: 5px;
+  }
+
+  /* El banner/carrusel principal mantiene su ancho prioritario */
+  .hero-banner {
+    width: 95%; /* Se expande un poco más en tablets para lucir el contenido */
+    min-height: 380px;
+  }
+
+  .hero-banner__content h2 {
+    font-size: 38px;
+  }
+
+  /* Ajustes estructurales de las páginas internas */
+  .contact-layout {
+    grid-template-columns: 1fr; 
+  }
+
+  .contact-cards-grid {
+    grid-template-columns: repeat(2, 1fr); 
+  }
+
+  .about-card {
+    padding: 40px 30px;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   DISPOSITIVOS PEQUEÑOS (Móviles - Menor a 768px hasta un mínimo de 320px)
+   -------------------------------------------------------------------------- */
+@media screen and (max-width: 768px) {
+  /* --- Ajustes Generales y Títulos --- */
+  .section-title h2 {
+    font-size: 32px;
+  }
+
+  /* --- MÁXIMA PRIORIDAD AL CARRUSEL / HERO BANNER --- */
+  .hero {
+    padding: 15px 0 10px; /* Reduce espacios externos */
+  }
+
+  .hero-banner {
+    width: 100%; /* Toma todo el ancho en celulares para no desperdiciar espacio */
+    min-height: 320px; /* Altura ergonómica para celulares */
+    border-radius: 16px; /* Bordes ligeramente más suaves en pantallas chicas */
+  }
+
+  .hero-banner__overlay {
+    padding: 20px; /* Más espacio para el texto interno */
+  }
+
+  .hero-banner__content h2 {
+    font-size: 28px; /* Texto grande y legible pero sin desbordar */
+    line-height: 1.2;
+  }
+
+  .hero-banner__content p {
+    font-size: 14px;
+    opacity: 0.9;
+  }
+
+  /* Adaptación de los botones de las flechas del slider para que no tapen el texto en móvil */
+  .banner-btn {
+    width: 36px;
+    height: 36px;
+    font-size: 16px;
+  }
+  .banner-btn--prev { left: 8px; }
+  .banner-btn--next { right: 8px; }
+
+
+  #btn-catalogo:checked ~ .container-catalogo {
+    visibility: visible;
+    opacity: 1;
+  }
+
+  #btn-catalogo:checked ~ .container-catalogo .cont-catalogo {
+    transform: translateX(0);
+  }
+
+  .cont-catalogo {
+    max-width: 85%;
+    width: 310px; 
+    background: var(--text); 
+    padding: 50px 24px;
+  }
+
+  .btn-cuenta-trigger {
+    padding: 8px 16px;
+    font-size: 14px;
+  }
+
+  /* --- Barra de Búsqueda Crítica --- */
+  .searchbar {
+    height: 48px; 
+  }
+
+  .searchbar input {
+    padding: 10px 14px;
+    font-size: 14px;
+  }
+
+  .searchbar button {
+    width: 58px;
+    min-width: 58px;
+    height: 46px;
+  }
+
+  .searchbar button img {
+    width: 24px;
+    height: 24px;
+  }
+
+  /* --- Ajustes en cuadrículas de Elementos y Páginas --- */
+  .contact-cards-grid {
+    grid-template-columns: 1fr; 
+  }
+
+  .contact-card {
+    min-height: auto;
+    padding: 65px 20px 30px;
+  }
+
+  .about-row {
+    grid-template-columns: 1fr; 
+    gap: 20px;
+    text-align: center;
+  }
+
+  .about-icon {
+    justify-content: center;
+    padding-top: 0;
+  }
+
+  .about-content .title-line {
+    justify-content: center;
+  }
+
+  .about-content .title-line h2 {
+    padding: 0 10px;
+    font-size: 26px;
+  }
+
+  /* --- Ajuste Extremo Especial para Celulares de 320px --- */
+  @media (max-width: 360px) {
+    .brand__text h1 {
+      font-size: 24px; 
+    }
+
+    .brand__logo {
+      width: 75px;
+      height: auto;
+    }
+
+    .hero-banner__content h2 {
+      font-size: 24px;
+    }
+
+    .hero-banner__actions .btn {
+      padding: 8px 14px;
+      font-size: 12px;
+    }
+
+    .sidebar-cuenta {
+      width: 100%; 
+      max-width: 100%;
+    }
+  }
+}
+/* ==========================================================================
+   13. RESPONSIVE DESIGN - PÁGINA: PRÓXIMAS FERIAS
+   ========================================================================== */
+/* --------------------------------------------------------------------------
+   DISPOSITIVOS MEDIANOS (Tablets - Menor a 992px)
+   -------------------------------------------------------------------------- */
+@media screen and (max-width: 992px) {
+  /* Expandimos el contenedor de las ferias para aprovechar mejor las pantallas medianas */
+  .banners-grid {
+    width: 95%; /* Sube del 85% original para evitar franjas vacías a los lados */
+    gap: 24px;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   DISPOSITIVOS PEQUEÑOS (Móviles - Menor a 768px hasta un mínimo de 320px)
+   -------------------------------------------------------------------------- */
+@media screen and (max-width: 768px) {
+  /* Optimizamos el contenedor general de las ferias en pantallas táctiles */
+  .banners-grid {
+    width: 100%; /* Aprovecha el 100% del espacio en celulares */
+    gap: 20px;
+    padding: 0 4px;
+  }
+
+  /* Transformamos la tarjeta de feria para que la imagen y el texto se organicen de forma vertical */
+  .banner-card {
+    display: flex;
+    flex-direction: column; /* Apila la foto arriba y el contenido abajo */
+    border-radius: var(--radius-md); /* Suaviza las esquinas en entornos móviles */
+  }
+
+  /* Control absoluto sobre la imagen promocional de la feria */
+  .banner-card img {
+    width: 100%;
+    height: 200px; /* Reducimos la altura para que no empuje el texto fuera de la pantalla */
+    object-fit: cover;
+  }
+
+  /* Espaciado interno optimizado para leer los datos del evento con comodidad */
+  .banner-card__content {
+    padding: 20px 16px;
+  }
+
+  .banner-card__content h3 {
+    font-size: 24px; /* Un tamaño de letra perfecto para títulos de eventos en celular */
+    margin-top: 6px;
+    margin-bottom: 8px;
+    line-height: 1.2;
+  }
+
+  /* Ajuste de la meta-información (Fechas, lugar, etc.) */
+  .banner-card__meta {
+    font-size: 13px;
+    margin-bottom: 12px;
+  }
+
+  .banner-card__content p {
+    font-size: 14.5px;
+    line-height: 1.5;
+  }
+
+  /* Botón "Saber más" o acción del evento adaptado para clics táctiles */
+  .fair-btn {
+    display: block;
+    text-align: center;
+    width: 100%;
+    padding: 12px;
+    margin-top: 15px;
+    box-sizing: border-box;
+  }
+
+  /* --- Adaptación del Mapa de Ubicación en el Footer --- */
+  .footer iframe {
+    min-height: 180px; /* Evita que el mapa robe excesivo espacio al hacer scroll con el dedo */
+  }
+}
+
+/* --------------------------------------------------------------------------
+   AJUSTE EXTREMO (Móviles muy pequeños - Menor a 360px hasta 320px)
+   -------------------------------------------------------------------------- */
+@media screen and (max-width: 360px) {
+  .banner-card img {
+    height: 160px; /* Imagen más compacta para que el usuario vea el título del evento de inmediato */
+  }
+
+  .banner-card__content h3 {
+    font-size: 21px; /* Evita desbordamientos de palabras largas como 'Internacional' o 'Universitario' */
+  }
+
+  .banner-card__content p {
+    font-size: 13.5px;
+  }
+}
+
+/* ==========================================================================
+   14. RESPONSIVE DESIGN - PÁGINA: ¿QUIÉNES SOMOS?
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   DISPOSITIVOS MEDIANOS (Tablets - Menor a 992px)
+   -------------------------------------------------------------------------- */
+@media screen and (max-width: 992px) {
+  .about-page {
+    padding: 40px 0 60px 0; /* Compactamos ligeramente los márgenes externos */
+  }
+
+  .about-card {
+    padding: 40px 35px; /* Reducimos el relleno interno para ganar espacio útil */
+    width: 96%; /* Nos aseguramos de que no toque los bordes físicos de la pantalla */
+  }
+
+  .about-header {
+    padding: 30px 15px;
+  }
+
+  .about-header h1 {
+    font-size: 38px;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   DISPOSITIVOS PEQUEÑOS (Móviles - Menor a 768px hasta un mínimo de 320px)
+   -------------------------------------------------------------------------- */
+@media screen and (max-width: 768px) {
+  .about-page {
+    padding: 25px 0 40px 0;
+  }
+
+  /* La tarjeta principal se expande para aprovechar al máximo las pantallas móviles táctiles */
+  .about-card {
+    padding: 30px 16px;
+    border-radius: var(--radius-md); /* Suavizado de bordes armónico con móviles */
+    width: 100%;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .about-header h1 {
+    font-size: 32px;
+    margin-bottom: 10px;
+  }
+
+  .about-header p {
+    font-size: 15.5px;
+    line-height: 1.6;
+  }
+
+  /* Cambiamos la cuadrícula de fila a columna: El ícono sube y el texto se expande abajo */
+  .about-row {
+    grid-template-columns: 1fr;
+    gap: 20px;
+    padding: 30px 0;
+    text-align: center; /* Centramos el contenido para mejorar la simetría visual */
+  }
+
+  .about-row:first-of-type {
+    padding-top: 0;
+  }
+
+  /* Centramos el contenedor del ícono y su filtro de color */
+  .about-icon {
+    justify-content: center;
+    padding-top: 0;
+  }
+
+  .about-icon img {
+    width: 70px; /* Tamaño ergonómico ideal para celulares */
+    height: auto;
+  }
+
+  /* Centrado de la línea del título decorativo */
+  .about-content .title-line {
+    justify-content: center;
+    margin-bottom: 18px;
+  }
+
+  /* Ajustamos el tamaño del título de cada bloque (Misión, Visión, Valores) */
+  .about-content .title-line h2 {
+    font-size: 26px;
+    padding-left: 0; /* Removemos el desfase izquierdo en celulares */
+    padding-right: 12px;
+  }
+
+  /* Configuración fina de la lista de viñetas para que no pierda margen al centrar */
+  .about-content ul {
+    text-align: left; /* Mantiene la lectura alineada a la izquierda (más cómoda) */
+    gap: 14px;
+  }
+
+  .about-content ul li {
+    font-size: 15px;
+    line-height: 1.6;
+    padding-left: 24px; /* Mantiene el espacio exacto para el rombo dorado */
+  }
+
+  .about-content ul li::before {
+    top: 7px; /* Realinea el rombo para que encaje con el nuevo tamaño de fuente */
+    width: 7px;
+    height: 7px;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   AJUSTE EXTREMO (Móviles muy pequeños - Menor a 360px hasta 320px)
+   -------------------------------------------------------------------------- */
+@media screen and (max-width: 360px) {
+  .about-header h1 {
+    font-size: 28px; /* Evita desbordes del título principal */
+  }
+
+  .about-header p {
+    font-size: 14.5px;
+  }
+
+  .about-content .title-line h2 {
+    font-size: 22px; /* Encaja perfectamente en la pantalla de 320px */
+  }
+
+  .about-content ul li {
+    font-size: 14px; /* Ajuste óptimo de lectura */
+  }
+}
+
+/* ==========================================================================
+   15. RESPONSIVE DESIGN - PÁGINA: CONTACTO
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   DISPOSITIVOS MEDIANOS (Tablets - Menor a 992px)
+   -------------------------------------------------------------------------- */
+@media screen and (max-width: 992px) {
+  /* Pasamos la distribución de dos columnas fijas a una sola columna vertical */
+  .contact-layout {
+    grid-template-columns: 1fr;
+    gap: 30px;
+    width: 95%; /* Evita que la estructura toque los bordes del dispositivo */
+    margin: 20px auto;
+  }
+
+  /* Las tarjetas informativas se dividen en dos columnas en pantallas tipo tablet */
+  .contact-info-column {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   DISPOSITIVOS PEQUEÑOS (Móviles - Menor a 768px hasta un mínimo de 320px)
+   -------------------------------------------------------------------------- */
+@media screen and (max-width: 768px) {
+  /* --- CORRECCIÓN CRÍTICA: BANNER DE CONTACTO --- */
+  .contact-header {
+    min-height: 240px; /* Le damos una altura digna para que la imagen luzca y respire */
+    padding: 40px 20px;
+    position: relative;
+    z-index: 1;
+    /* Creamos un degradado oscuro encima de la foto para blindar la lectura de las letras blancas */
+    background: linear-gradient(
+        rgba(29, 42, 34, 0.75), 
+        rgba(29, 42, 34, 0.6)
+      ),
+      url('../imagenes/banner-contacto.jpg') no-repeat center/cover; /* Mantiene tu lógica de fondo */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    border-radius: var(--radius-md);
+    margin-bottom: 25px;
+  }
+
+  .contact-header h1 {
+    font-size: 32px;
+    color: var(--white) !important;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.4); /* Capa extra de contraste */
+    margin-bottom: 8px;
+  }
+
+  .contact-header p {
+    font-size: 15px;
+    color: rgba(255, 255, 255, 0.95) !important;
+    max-width: 90%;
+    text-shadow: 0 1px 6px rgba(0, 0, 0, 0.3);
+  }
+
+  /* --- Estructura Interna de la Página --- */
+  .contact-layout {
+    width: 100%;
+    padding: 0 4px;
+    gap: 24px;
+  }
+
+  /* En celulares, apilamos las tarjetas una debajo de otra para máxima lectura */
+  .contact-info-column {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  .contact-box-card {
+    padding: 20px;
+    text-align: center; 
+    border-radius: var(--radius-sm);
+  }
+
+  /* --- Bloque del Formulario de Contacto --- */
+  .contact-form-card {
+    padding: 30px 16px; 
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .contact-form-card h2 {
+    font-size: 26px;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  .form-row {
+    grid-template-columns: 1fr;
+    gap: 16px; 
+  }
+
+  .contact-form-card .form-group {
+    margin-bottom: 16px;
+  }
+
+  .contact-form-card .form-control {
+    padding: 14px 16px;
+    font-size: 15px;
+    border-radius: var(--radius-sm);
+  }
+
+  .contact-form-card textarea.form-control {
+    height: 130px;
+    resize: none; 
+  }
+
+  .contact-form-card .primary-button {
+    width: 100%;
+    padding: 14px;
+    font-size: 16px;
+    text-align: center;
+    justify-content: center;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   AJUSTE EXTREMO (Móviles muy pequeños - Menor a 360px hasta 320px)
+   -------------------------------------------------------------------------- */
+@media screen and (max-width: 360px) {
+  .contact-form-card h2 {
+    font-size: 22px; /* Encaja perfectamente en los 320px del iPhone SE */
+  }
+
+  .contact-box-card h3 {
+    font-size: 18px;
+  }
+
+  .contact-box-card p {
+    font-size: 13.5px;
+  }
+}

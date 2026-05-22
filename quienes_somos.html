@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Amanecer Literario - ¿Quiénes Somos?</title>
+  <link rel="icon" type="image/png" href="imagenes/logo.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.css">
+</head>
+
+<body>
+  <input type="checkbox" id="btn-cuenta" class="btn-cuenta-check" style="display: none;">
+  <label for="btn-cuenta" class="cuenta-overlay"></label>
+  
+  <aside class="sidebar-cuenta">
+    <div class="sidebar-header">
+      <h3>Mi Cuenta</h3>
+      <label for="btn-cuenta" class="btn-cerrar">×</label>
+    </div>
+
+    <div class="sidebar-content">
+      <ul class="nav-tabs" role="tablist">
+        <li role="presentation" class="tab-item active" id="tab-login-btn">
+          <a href="#login" class="tab-link">Iniciar Sesión</a>
+        </li>
+        <li role="presentation" class="tab-item" id="tab-registro-btn">
+          <a href="#registro" class="tab-link">Registrarse</a>
+        </li>
+      </ul>
+
+      <div class="tab-content">
+        <div class="tab-pane active" id="login-pane">
+          <form name="form-login" action="#" method="post" novalidate="true">
+            <input type="hidden" name="fr_accion" value="modificar">
+            <div class="form-group">
+              <label for="email" class="control-label">Correo electrónico</label>
+              <input type="email" class="form-control" name="email" id="email" placeholder="ejemplo@correo.com" required>
+            </div>
+            <div class="form-group">
+              <label for="clave" class="control-label">Contraseña</label>
+              <input type="password" class="form-control" name="clave" id="clave" placeholder="••••••••" required>
+            </div>
+            <div class="form-group login-links">
+              <button type="submit" class="btn-submit">Ingresar</button>
+            </div>
+          </form>
+        </div>
+
+        <div class="tab-pane" id="registro-pane" style="display: none;"> 
+          <form id="form-registro" name="form-registro" action="#" method="post" role="form" novalidate="true">
+            <input type="hidden" name="mercaTiempo" value="1779129653">
+            <div class="form-group">
+              <label for="nombre-register" class="control-label">Nombre completo</label>
+              <input type="text" class="form-control" name="nombre" id="nombre-register" placeholder="Tu nombre" required>
+            </div>
+            <div class="form-group">
+              <label for="email-register" class="control-label">Correo Electrónico</label>
+              <input type="email" class="form-control" name="email" id="email-register" placeholder="ejemplo@correo.com" required>
+            </div>
+            <div class="form-group">
+              <label for="clave-register" class="control-label">Contraseña</label>
+              <input type="password" class="form-control" name="clave" id="clave-registro" placeholder="Mínimo 6 caracteres" required>
+            </div>
+            <div class="form-group">
+              <label for="clave-register-repetida" class="control-label">Repetir Contraseña</label>
+              <input type="password" class="form-control" name="claveRepetida" id="clave-registro-repetida" placeholder="Repite tu contraseña" required>
+            </div>
+            <div class="form-group">
+              <div class="checkbox-group">
+                <input id="condiciones" type="checkbox" value="1" name="condiciones" required>
+                <label for="condiciones">Acepto los <a href="#">términos y condiciones</a></label>
+              </div>
+            </div>
+            <div class="form-group">
+              <button type="submit" class="btn-submit">Crear Cuenta</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <input type="checkbox" id="btn-catalogo" style="display: none;">
+  <input type="checkbox" id="btn-menu" style="display: none;">
+
+  <header class="navbar">
+    <div class="container navbar__content">
+      <a href="index.html" class="brand">
+        <img src="imagenes/logo.png" alt="Logo Amanecer Literario" class="brand__logo">
+        <div class="brand__text">
+          <h1>Amanecer Literario</h1>
+        </div>
+      </a>
+
+      <form class="searchbar" id="bookSearchForm">
+        <input type="text" id="bookSearch" placeholder="Buscar libro, autor o categoría">
+        <button type="submit">
+          <img src="imagenes/buscar.png" alt="Buscar">
+        </button>
+      </form>
+
+      <div class="nav-actions">
+        <label for="btn-cuenta" class="btn-cuenta-trigger" style="cursor: pointer;">Mi cuenta</label>
+        <label for="btn-menu" class="btn-menu-trigger">
+          <span></span>
+          <span></span>
+          <span></span>
+        </label>
+      </div>
+    </div>
+
+    <nav class="main-menu">
+      <div class="container main-menu_content">
+        <a href="index.html">Inicio</a>
+        <label for="btn-catalogo" class="boton-catalogo-trigger" style="cursor: pointer;">Catálogo</label>
+        <a href="prox_ferias.html">Próximas Ferias</a>
+        <a href="quienes_somos.html">¿Quiénes somos?</a>
+        <a href="contacto.html">Contacto</a>
+      </div>
+    </nav>
+  </header>
+
+  <div class="container-catalogo">
+    <div class="cont-catalogo">
+      <label for="btn-catalogo" class="icon-equis">X</label>
+      <nav>
+        <h3>Categorías</h3>
+        <ul>
+          <li><a href="#">Novela</a></li>
+          <li><a href="#">Misterio</a></li>
+          <li><a href="#">Fantasía</a></li>
+          <li><a href="#">Clásicos</a></li>
+          <li><a href="#">Infantil</a></li>
+          <li><a href="#">Juvenil</a></li>
+        </ul>
+      </nav>  
+    </div>
+    <label for="btn-catalogo" class="overlay-cerrar"></label>
+  </div>
+
+  <main>
+    <section class="section">
+      <div class="container">
+        
+        <div class="section-title">
+          <div class="quien">
+            <h2>¿Quiénes Somos?</h2>
+            <p>Amanecer Literario es un espacio dedicado a los amantes de la lectura, donde buscamos conectar a las personas con historias inspiradoras, conocimientos significativos y experiencias culturales únicas.</p>
+          </div>
+        </div>
+        
+        <article class="about-card">
+          <div class="title-line title-left">
+            <h2>Misión</h2>
+          </div>
+          <div class="about-row">
+            <div class="about-icon">
+              <img src="imagenes/mision.png" alt="Icono Misión">
+            </div>
+            <div class="about-content">
+              <p>Fomentar el hábito de la lectura y enriquecer la vida de nuestra comunidad ofreciendo una cuidada selección de libros que inspiren, eduquen y entretengan. Nos dedicamos a ser un puente entre autores e historias con los lectores, promoviendo la cultura, el conocimiento y el libre intercambio de ideas en un ambiente acogedor y accesible para todos.</p>
+            </div>
+          </div>
+        </article>
+
+        <article class="about-card">
+          <div class="title-line title-center">
+            <h2>Visión</h2>
+          </div>
+          <div class="about-row">
+            <div class="about-icon">
+              <img src="imagenes/vision.png" alt="Icono Visión">
+            </div>
+            <div class="about-content">
+              <p>Para el año 2028, nos proyectamos como la librería líder y el referente cultural más querido de nuestra región, reconocidos por nuestra excellence en el servicio, la innovación en la recomendación de lecturas y nuestro impacto positivo en la comunidad. Aspiramos a expandir nuestro alcance digital para conectar a lectores de todo el país, transformando cada espacio en un amanecer de nuevas historias y aprendizajes continuos.</p>
+            </div>
+          </div>
+        </article>
+
+        <article class="about-card">
+          <div class="title-line title-right">
+            <h2>Nuestros Valores</h2>
+          </div>
+          <div class="about-row">
+            <div class="about-icon">
+              <img src="imagenes/valores.png" alt="Icono Valores">
+            </div>
+            <div class="about-content">
+              <ul>
+                <li><strong>Pasión por la lectura:</strong> Creemos firmemente en el poder transformador de los libros y transmitimos ese entusiasmo a cada persona que nos visita.</li>
+                <li><strong>Comunidad e inclusión:</strong> Creamos un espacio abierto, diverso y respetuoso donde todas las voces son bienvenidas y celebradas.</li>
+                <li><strong>Calidad y confianza:</strong> Nos comprometemos a ofrecer una atención personalizada y recomendaciones honestas, construyendo relaciones duraderas basadas en la confianza.</li>
+          </div>
+        </article>
+
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer" id="contacto">
+    <div class="container footer__grid">
+      <div>
+        <h3>Amanecer Literario</h3>
+        <p>Librería enfocada en venta de libros, recomendaciones y promoción de ferias literarias.</p>
+      </div>
+      <div>
+        <h3>Contacto</h3>
+        <div class="contact-info-list">
+          <p>Cra. 12d Bis #22b 55, sur, Bogotá</p>
+          <p>Celular: +57 313 300 68 90</p>
+          <p>Instagram: @amanecerliterariooficial</p>
+          <p>Facebook: Amanecer Literario</p>
+          <p>Correo: libreriaamanecerliterario@gmail.com</p>
+        </div>
+      </div>
+      <div>
+        <h3>Ubicación</h3>
+        <div class="map-container">
+          <iframe
+             src="https://maps.google.com/maps?q=Cra.%2012d%20Bis%20%2322b%2055%2C%20sur%2C%20Bogot%C3%A1&t=&z=13&ie=UTF8&iwloc=&output=embed" title="Mapa de ubicación de 
+             Amanecer Literario" referrerpolicy="strict-origin-when-cross-origin" allowfullscreenloading="lazy">
+          </iframe>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 Amanecer Literario. Todos los derechos reservados.</p>
+    </div>
+  </footer>
+
+  <script src="js/inisio-registro.js"></script>
+</body>
+</html>
