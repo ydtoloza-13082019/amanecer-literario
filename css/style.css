@@ -1414,6 +1414,30 @@ header.header .nav-actions label.nav-actions__btn:hover svg {
   box-shadow: 0 0 0 4px rgba(47,107,79,0.12);
 }
 
+.sidebar-cuenta .form-group input,
+.sidebar-cuenta .form-group textarea,
+.sidebar-cuenta .form-control {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  color: var(--white);
+  caret-color: var(--accent);
+}
+
+.sidebar-cuenta .form-group input::placeholder,
+.sidebar-cuenta .form-group textarea::placeholder,
+.sidebar-cuenta .form-control::placeholder {
+  color: rgba(255, 255, 255, 0.64);
+}
+
+.sidebar-cuenta .form-group input:focus,
+.sidebar-cuenta .form-group textarea:focus,
+.sidebar-cuenta .form-control:focus {
+  background: rgba(255, 255, 255, 0.16);
+  border-color: var(--accent);
+  color: var(--white);
+  box-shadow: 0 0 0 4px rgba(185, 146, 90, 0.18);
+}
+
 .primary-button {
   width: 100%;
   margin-top: 4px;
