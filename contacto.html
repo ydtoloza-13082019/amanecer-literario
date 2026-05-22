@@ -12,10 +12,11 @@
 
   <meta property="og:title" content="Contacto | Comunícate con Amanecer Literario" />
   <meta property="og:description" content="Escríbenos o visítanos en Bogotá. Estamos listos para asesorarte en tus lecturas favoritas." />
-  <meta property="og:image" content="imagenes/logo.png" />
+  <meta property="og:image" content="https://ydtoloza-13082019.github.io/amanecer-literario/imagenes/logo.png" />
   <meta property="og:url" content="https://ydtoloza-13082019.github.io/amanecer-literario/" />
   <meta property="og:type" content="website" />
   <link rel="icon" type="image/png" href="imagenes/logo.png">
+  <link rel="canonical" href="https://ydtoloza-13082019.github.io/amanecer-literario/contacto.html">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -108,8 +109,8 @@
         </div>
       </a>
 
-      <form class="searchbar" id="bookSearchForm">
-        <input type="text" id="bookSearch" placeholder="Buscar libro, autor o categoría">
+      <form class="searchbar" id="bookSearchForm" role="search" aria-label="Buscar libros">
+        <input type="search" id="bookSearch" name="busqueda" placeholder="Buscar libro, autor o categoría" aria-label="Buscar libro, autor o categoría">
         <button type="submit">
           <img src="imagenes/buscar.png" alt="Buscar">
         </button>
@@ -117,7 +118,7 @@
 
       <div class="nav-actions">
         <label for="btn-cuenta" class="btn-cuenta-trigger" style="cursor: pointer;">Mi cuenta</label>
-        <label for="btn-menu" class="btn-menu-trigger">
+        <label for="btn-menu" class="btn-menu-trigger" aria-label="Abrir menú">
           <span></span>
           <span></span>
           <span></span>
@@ -131,7 +132,7 @@
         <label for="btn-catalogo" class="boton-catalogo-trigger" style="cursor: pointer;">Catálogo</label>
         <a href="prox_ferias.html">Próximas Ferias</a>
         <a href="quienes_somos.html">¿Quiénes somos?</a>
-        <a href="contacto.html">Contacto</a>
+        <a href="contacto.html" class="active">Contacto</a>
       </div>
     </nav>
   </header>
@@ -167,7 +168,7 @@
                 <p>En Amanecer Literario creemos que cada libro tiene el poder de inspirar, emocionar y transformar. Contáctanos y descubre un espacio creado para lectores apasionados y amantes de las grandes historias.</p>
               </div>
             </div>
-            <img src="imagenes/1.jpg" alt="Biblioteca Amanecer Literario" />
+            <img src="imagenes/1.jpg" alt="Biblioteca Amanecer Literario" loading="lazy">
           </section>
 
           <section class="contact-cards-grid">
@@ -262,7 +263,7 @@
         <div class="map-container">
           <iframe
              src="https://maps.google.com/maps?q=Cra.%2012d%20Bis%20%2322b%2055%2C%20sur%2C%20Bogot%C3%A1&t=&z=13&ie=UTF8&iwloc=&output=embed" title="Mapa de ubicación de 
-             Amanecer Literario" referrerpolicy="strict-origin-when-cross-origin" allowfullscreenloading="lazy">
+             Amanecer Literario" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen loading="lazy">
           </iframe>
         </div>
       </div>
