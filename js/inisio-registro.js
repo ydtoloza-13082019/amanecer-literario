@@ -33,19 +33,10 @@ document.addEventListener("DOMContentLoaded", function () {
 document.addEventListener("DOMContentLoaded", () => {
   // Definimos la lista de tus 3 banners con sus nombres exactos y sus respectivos títulos
   const coleccionBanners = [
-    {
-      imagen: "imagenes/baner1.jpg",
-      titulo: "Descubre historias para cada amanecer"
-    },
-    {
-      imagen: "imagenes/banner2.png",
-      
-    },
-    {
-      imagen: "imagenes/banner3.png",
-      
-    }
-  ];
+  { imagen: "imagenes/baner1.jpg" },
+  { imagen: "imagenes/banner2.jpg" },
+  { imagen: "imagenes/banner3.jpg" }
+];
 
   let indiceActual = 0;
   let temporizadorRotacion;
