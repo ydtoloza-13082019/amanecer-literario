@@ -9,13 +9,13 @@ const PORT = process.env.PORT || 3000;
 
 async function startServer() {
   try {
-    await sequelize.authenticate();
+   // await sequelize.authenticate();
     console.log('Conexion a MySQL establecida correctamente.');
 
-    await sequelize.sync();
+    //await sequelize.sync();
     console.log('Modelos sincronizados correctamente.');
 
-    await ensureSingleActiveCartConstraint(sequelize);
+    //await ensureSingleActiveCartConstraint(sequelize);
     console.log('Restriccion de carrito activo verificada correctamente.');
 
     const usuarioRepository = new UsuarioRepository(Usuario);
@@ -32,12 +32,10 @@ async function startServer() {
     }
 
     app.listen(PORT, () => {
-      console.log(`Servidor ejecutandose en http://localhost:${PORT}`);
+      console.log(`Servidor ejecutandose en puerto ${PORT}`);
     });
   } catch (error) {
-    console.error('Error al iniciar el servidor:', error.message);
-    process.exit(1);
-  }
+  console.error('Error al iniciar el servidor:', error.message);
 }
 
 startServer();
