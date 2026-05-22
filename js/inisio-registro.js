@@ -34,16 +34,16 @@ document.addEventListener("DOMContentLoaded", () => {
   // Definimos la lista de tus 3 banners con sus nombres exactos y sus respectivos títulos
   const coleccionBanners = [
     {
-      imagen: "imagenes/baner 1.jpg",
+      imagen: "imagenes/baner1.jpg",
       titulo: "Descubre historias para cada amanecer"
     },
     {
-      imagen: "imagenes/banner 2.png",
-      titulo: "Explora nuevos mundos en nuestro catálogo"
+      imagen: "imagenes/banner2.png",
+      
     },
     {
-      imagen: "imagenes/banner 3.png",
-      titulo: "Entérate de las próximas ferias literarias"
+      imagen: "imagenes/banner3.png",
+      
     }
   ];
 
@@ -52,28 +52,23 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Seleccionamos los elementos del HTML
   const elImagen = document.getElementById("mainBannerImage");
-  const elTitulo = document.getElementById("mainBannerTitle");
   const elBtnAtras = document.getElementById("bannerPrevBtn");
   const elBtnAdelante = document.getElementById("bannerNextBtn");
 
   // Función encargada de hacer el cambio de contenido con una transición suave
-  function actualizarBanner(nuevoIndice) {
-    if (!elImagen || !elTitulo) return;
-    
-    indiceActual = nuevoIndice;
+ function actualizarBanner(nuevoIndice) {
+  if (!elImagen) return;
 
-    // Efecto de desvanecimiento corto (fade out)
-    elImagen.style.opacity = "0.3";
+  indiceActual = nuevoIndice;
 
-    setTimeout(() => {
-      // Reemplazamos la ruta de la imagen y el texto del h2
-      elImagen.src = coleccionBanners[indiceActual].imagen;
-      elTitulo.textContent = coleccionBanners[indiceActual].titulo;
-      
-      // Regresamos la opacidad a la normalidad (fade in)
-      elImagen.style.opacity = "1";
-    }, 250);
-  }
+  elImagen.style.opacity = "0.3";
+
+  setTimeout(() => {
+    elImagen.src = coleccionBanners[indiceActual].imagen;
+
+    elImagen.style.opacity = "1";
+  }, 250);
+}
 
   // Funciones para avanzar y retroceder de posición
   function siguienteBanner() {
