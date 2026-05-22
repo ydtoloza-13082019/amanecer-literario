@@ -145,10 +145,10 @@ document.addEventListener("DOMContentLoaded", function () {
 document.addEventListener("DOMContentLoaded", () => {
   // Definimos la lista de tus 3 banners con sus nombres exactos y sus respectivos títulos
   const coleccionBanners = [
-  { imagen: "imagenes/baner1.jpg" },
-  { imagen: "imagenes/banner2.jpg" },
-  { imagen: "imagenes/banner3.jpg" }
-];
+    { imagen: "imagenes/baner1.jpg" },
+    { imagen: "imagenes/banner2.png" },
+    { imagen: "imagenes/banner3.png" }
+  ];
 
   let indiceActual = 0;
   let temporizadorRotacion;
@@ -310,43 +310,45 @@ document.addEventListener("DOMContentLoaded", () => {
 // ==========================================================================
 // LÓGICA DEL CARRUSEL libros destacados (SWIPER.JS)
 // ==========================================================================
-const swiper = new Swiper(".slider-wrapper", {
-  loop: true,
-  spaceBetween: 20, // Espacio de 20px entre cada una de las 5 tarjetas
-  grabCursor: true,
+if (typeof Swiper !== "undefined" && document.querySelector(".slider-wrapper")) {
+  const swiper = new Swiper(".slider-wrapper", {
+    loop: true,
+    spaceBetween: 20, // Espacio de 20px entre cada una de las 5 tarjetas
+    grabCursor: true,
 
-  // Paginación (Puntitos de abajo)
-  pagination: {
-    el: ".swiper-pagination",
-    clickable: true,
-    dynamicBullets: true,
-  },
+    // Paginación (Puntitos de abajo)
+    pagination: {
+      el: ".swiper-pagination",
+      clickable: true,
+      dynamicBullets: true,
+    },
 
-  // Flechas de navegación (Asegúrate de que apunten a estas clases)
-  navigation: {
-    nextEl: ".swiper-button-next",
-    prevEl: ".swiper-button-prev",
-  },
+    // Flechas de navegación (Asegúrate de que apunten a estas clases)
+    navigation: {
+      nextEl: ".swiper-button-next",
+      prevEl: ".swiper-button-prev",
+    },
 
-  // Puntos de ruptura para controlar cuántas tarjetas se ven
-  breakpoints: {
-    0: {
-      slidesPerView: 1,
-    },
-    560: {
-      slidesPerView: 2,
-    },
-    768: {
-      slidesPerView: 3,
-    },
-    1024: {
-      slidesPerView: 4,
-    },
-    1200: {
-      slidesPerView: 5, // <--- Esto forzará las 5 tarjetas en pantallas grandes
+    // Puntos de ruptura para controlar cuántas tarjetas se ven
+    breakpoints: {
+      0: {
+        slidesPerView: 1,
+      },
+      560: {
+        slidesPerView: 2,
+      },
+      768: {
+        slidesPerView: 3,
+      },
+      1024: {
+        slidesPerView: 4,
+      },
+      1200: {
+        slidesPerView: 5, // <--- Esto forzará las 5 tarjetas en pantallas grandes
+      }
     }
-  }
-});
+  });
+}
 
 
 /* =========================================
