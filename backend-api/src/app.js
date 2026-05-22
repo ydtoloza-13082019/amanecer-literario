@@ -40,6 +40,17 @@ app.get('/health', (req, res) => {
 });
 
 app.get('/health/db', async (req, res) => {
+  const requiredEnv = ['DB_HOST', 'DB_PORT', 'DB_NAME', 'DB_USER', 'DB_PASSWORD'];
+  const missingEnv = requiredEnv.filter((key) => !process.env[key]);
+
+  if (missingEnv.length > 0) {
+    return res.status(503).json({
+      ok: false,
+      message: 'Faltan variables de entorno para conectar la base de datos.',
+      missingEnv
+    });
+  }
+
   try {
     await sequelize.authenticate();
     res.status(200).json({
@@ -50,7 +61,7 @@ app.get('/health/db', async (req, res) => {
     res.status(503).json({
       ok: false,
       message: 'No se pudo conectar a la base de datos.',
-      detail: error.message
+      detail: error.message || error.parent?.message || error.original?.message || error.name
     });
   }
 });
