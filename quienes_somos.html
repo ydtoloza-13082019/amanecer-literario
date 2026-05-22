@@ -3,14 +3,35 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Amanecer Literario - ¿Quiénes Somos?</title>
+  <title>¿Quiénes Somos? | Amanecer Literario</title>
+
+<meta name="description" content="Conoce la misión, visión y valores de Amanecer Literario, una librería enfocada en promover la lectura, la cultura y el acceso al conocimiento en Bogotá.">
+
+<meta name="keywords" content="Amanecer Literario, librería Bogotá, misión librería, visión cultural, valores literarios, lectura y cultura">
+
+<meta name="author" content="Amanecer Literario">
+
+<meta name="robots" content="index, follow">
+
+<meta property="og:title" content="¿Quiénes Somos? | Amanecer Literario">
+
+<meta property="og:description" content="Descubre nuestra misión, visión y compromiso con la cultura y la lectura.">
+
+<meta property="og:image" content="https://ydtoloza-13082019.github.io/amanecer-literario/imagenes/logo.png">
+
+<meta property="og:url" content="https://ydtoloza-13082019.github.io/amanecer-literario/quienes_somos.html">
+
+<meta property="og:type" content="website">
+
+<meta name="theme-color" content="#111111">
+
+<link rel="canonical" href="https://ydtoloza-13082019.github.io/amanecer-literario/quienes_somos.html">
   <link rel="icon" type="image/png" href="imagenes/logo.png">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.css">
 </head>
 
 <body>
@@ -97,8 +118,8 @@
         </div>
       </a>
 
-      <form class="searchbar" id="bookSearchForm">
-        <input type="text" id="bookSearch" placeholder="Buscar libro, autor o categoría">
+      <form class="searchbar" id="bookSearchForm" role="search" aria-label="Buscar libros">
+        <input type="search" id="bookSearch" name="busqueda" placeholder="Buscar libro, autor o categoría" aria-label="Buscar libro, autor o categoría">
         <button type="submit">
           <img src="imagenes/buscar.png" alt="Buscar">
         </button>
@@ -106,7 +127,7 @@
 
       <div class="nav-actions">
         <label for="btn-cuenta" class="btn-cuenta-trigger" style="cursor: pointer;">Mi cuenta</label>
-        <label for="btn-menu" class="btn-menu-trigger">
+       <label for="btn-menu" class="btn-menu-trigger" aria-label="Abrir menú">
           <span></span>
           <span></span>
           <span></span>
@@ -119,7 +140,7 @@
         <a href="index.html">Inicio</a>
         <label for="btn-catalogo" class="boton-catalogo-trigger" style="cursor: pointer;">Catálogo</label>
         <a href="prox_ferias.html">Próximas Ferias</a>
-        <a href="quienes_somos.html">¿Quiénes somos?</a>
+        <a href="quienes_somos.html" class="active">¿Quiénes somos?</a>
         <a href="contacto.html">Contacto</a>
       </div>
     </nav>
@@ -160,7 +181,7 @@
           </div>
           <div class="about-row">
             <div class="about-icon">
-              <img src="imagenes/mision.png" alt="Icono Misión">
+              <img src="imagenes/mision.png" alt="Icono Misión" loading="lazy">
             </div>
             <div class="about-content">
               <p>Fomentar el hábito de la lectura y enriquecer la vida de nuestra comunidad ofreciendo una cuidada selección de libros que inspiren, eduquen y entretengan. Nos dedicamos a ser un puente entre autores e historias con los lectores, promoviendo la cultura, el conocimiento y el libre intercambio de ideas en un ambiente acogedor y accesible para todos.</p>
@@ -174,10 +195,10 @@
           </div>
           <div class="about-row">
             <div class="about-icon">
-              <img src="imagenes/vision.png" alt="Icono Visión">
+              <img src="imagenes/vision.png" alt="Icono Visión" loading="lazy">
             </div>
             <div class="about-content">
-              <p>Para el año 2028, nos proyectamos como la librería líder y el referente cultural más querido de nuestra región, reconocidos por nuestra excellence en el servicio, la innovación en la recomendación de lecturas y nuestro impacto positivo en la comunidad. Aspiramos a expandir nuestro alcance digital para conectar a lectores de todo el país, transformando cada espacio en un amanecer de nuevas historias y aprendizajes continuos.</p>
+              <p>Para el año 2028, nos proyectamos como la librería líder y el referente cultural más querido de nuestra región, reconocidos por nuestra excelencia en el servicio, la innovación en la recomendación de lecturas y nuestro impacto positivo en la comunidad. Aspiramos a expandir nuestro alcance digital para conectar a lectores de todo el país, transformando cada espacio en un amanecer de nuevas historias y aprendizajes continuos.</p>
             </div>
           </div>
         </article>
@@ -188,7 +209,7 @@
           </div>
           <div class="about-row">
             <div class="about-icon">
-              <img src="imagenes/valores.png" alt="Icono Valores">
+              <img src="imagenes/valores.png" alt="Icono Valores" loading="lazy">
             </div>
             <div class="about-content">
               <ul>
