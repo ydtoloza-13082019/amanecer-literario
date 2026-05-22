@@ -28,6 +28,118 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 // ==========================================================
+// CONEXION CON API: LOGIN / REGISTRO
+// ==========================================================
+const API_BASE_URL = window.AMANECER_API_URL || "http://localhost:3000/api";
+
+async function apiRequest(endpoint, options = {}) {
+  const response = await fetch(`${API_BASE_URL}${endpoint}`, {
+    headers: {
+      "Content-Type": "application/json",
+      ...(options.headers || {})
+    },
+    ...options
+  });
+
+  const data = await response.json().catch(() => ({}));
+
+  if (!response.ok) {
+    throw new Error(data.message || "No se pudo completar la solicitud.");
+  }
+
+  return data;
+}
+
+function saveAuthSession(data) {
+  if (data.token) {
+    localStorage.setItem("amanecerToken", data.token);
+  }
+
+  if (data.usuario) {
+    localStorage.setItem("amanecerUsuario", JSON.stringify(data.usuario));
+  }
+}
+
+function setSubmitState(form, isLoading) {
+  const button = form.querySelector('button[type="submit"]');
+
+  if (!button) return;
+
+  if (!button.dataset.originalText) {
+    button.dataset.originalText = button.textContent;
+  }
+
+  button.disabled = isLoading;
+  button.textContent = isLoading ? "Procesando..." : button.dataset.originalText;
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+  const loginForm = document.forms["form-login"];
+  const registroForm = document.getElementById("form-registro");
+
+  if (loginForm) {
+    loginForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      setSubmitState(loginForm, true);
+
+      try {
+        const data = await apiRequest("/auth/login", {
+          method: "POST",
+          body: JSON.stringify({
+            email: loginForm.email.value.trim(),
+            password: loginForm.clave.value
+          })
+        });
+
+        saveAuthSession(data);
+        alert(data.message || "Inicio de sesion exitoso.");
+        document.getElementById("btn-cuenta").checked = false;
+      } catch (error) {
+        alert(error.message);
+      } finally {
+        setSubmitState(loginForm, false);
+      }
+    });
+  }
+
+  if (registroForm) {
+    registroForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const password = registroForm.querySelector("#clave-registro").value;
+      const repeatedPassword = registroForm.querySelector("#clave-registro-repetida").value;
+
+      if (password !== repeatedPassword) {
+        alert("Las contrasenas no coinciden.");
+        return;
+      }
+
+      setSubmitState(registroForm, true);
+
+      try {
+        const data = await apiRequest("/auth/register", {
+          method: "POST",
+          body: JSON.stringify({
+            nombre: registroForm.querySelector("#nombre-register").value.trim(),
+            email: registroForm.querySelector("#email-register").value.trim(),
+            password
+          })
+        });
+
+        saveAuthSession(data);
+        alert(data.message || "Cuenta creada correctamente.");
+        registroForm.reset();
+        document.getElementById("btn-cuenta").checked = false;
+      } catch (error) {
+        alert(error.message);
+      } finally {
+        setSubmitState(registroForm, false);
+      }
+    });
+  }
+});
+
+// ==========================================================
 // CONTROL DE CARRUSEL DINÁMICO Y ROTACIÓN DEL BANNER
 // ==========================================================
 document.addEventListener("DOMContentLoaded", () => {
@@ -266,12 +378,14 @@ if (toggleBtn && numbersList) {
 
 const contactForm = document.querySelector(".contact-form");
 
-contactForm.addEventListener("submit", (e) => {
+if (contactForm) {
+  contactForm.addEventListener("submit", (e) => {
 
-  e.preventDefault();
+    e.preventDefault();
 
-  alert("Mensaje enviado correctamente.");
+    alert("Mensaje enviado correctamente.");
 
-  contactForm.reset();
+    contactForm.reset();
 
-});
+  });
+}
