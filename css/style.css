@@ -467,6 +467,11 @@ button {
 .tab-pane {
     display: none;
 }
+
+.tab-pane.active {
+    display: block;
+}
+
 .form-group {
     display: flex;
     flex-direction: column;

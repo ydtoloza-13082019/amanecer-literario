@@ -9,10 +9,19 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Verificar que los elementos existan en el HTML antes de asignar el evento
   if (tabLogin && tabRegistro && loginPane && registroPane) {
+    tabLogin.classList.add('active');
+    tabRegistro.classList.remove('active');
+    loginPane.classList.add('active');
+    registroPane.classList.remove('active');
+    loginPane.style.display = 'block';
+    registroPane.style.display = 'none';
+
     tabLogin.addEventListener('click', function(e) {
       e.preventDefault();
       tabLogin.classList.add('active');
       tabRegistro.classList.remove('active');
+      loginPane.classList.add('active');
+      registroPane.classList.remove('active');
       loginPane.style.display = 'block';
       registroPane.style.display = 'none';
     });
@@ -21,6 +30,8 @@ document.addEventListener("DOMContentLoaded", function () {
       e.preventDefault();
       tabRegistro.classList.add('active');
       tabLogin.classList.remove('active');
+      registroPane.classList.add('active');
+      loginPane.classList.remove('active');
       loginPane.style.display = 'none';
       registroPane.style.display = 'block';
     });
