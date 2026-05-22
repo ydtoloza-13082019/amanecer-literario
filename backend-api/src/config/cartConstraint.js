@@ -1,8 +1,10 @@
 async function ensureSingleActiveCartConstraint(sequelize) {
+  const activeValue = sequelize.getDialect() === 'postgres' ? 'true' : '1';
+
   const [activeCarts] = await sequelize.query(`
     SELECT id, usuario_id
     FROM carritos
-    WHERE activo = 1
+    WHERE activo = ${activeValue}
     ORDER BY usuario_id ASC, id DESC
   `);
 
@@ -21,7 +23,7 @@ async function ensureSingleActiveCartConstraint(sequelize) {
     await sequelize.query(
       `
       UPDATE carritos
-      SET activo = 0
+      SET activo = false
       WHERE id IN (:ids)
       `,
       {
@@ -30,21 +32,43 @@ async function ensureSingleActiveCartConstraint(sequelize) {
     );
   }
 
-  const [indexes] = await sequelize.query(
-    `
-    SELECT INDEX_NAME
-    FROM information_schema.STATISTICS
-    WHERE TABLE_SCHEMA = DATABASE()
-      AND TABLE_NAME = 'carritos'
-      AND INDEX_NAME = 'uq_carritos_usuario_activo'
-    `
-  );
+  const dialect = sequelize.getDialect();
+  let indexes;
+
+  if (dialect === 'postgres') {
+    [indexes] = await sequelize.query(`
+      SELECT indexname
+      FROM pg_indexes
+      WHERE schemaname = 'public'
+        AND tablename = 'carritos'
+        AND indexname = 'uq_carritos_usuario_activo'
+    `);
+  } else {
+    [indexes] = await sequelize.query(
+      `
+      SELECT INDEX_NAME
+      FROM information_schema.STATISTICS
+      WHERE TABLE_SCHEMA = DATABASE()
+        AND TABLE_NAME = 'carritos'
+        AND INDEX_NAME = 'uq_carritos_usuario_activo'
+      `
+    );
+  }
 
   if (indexes.length === 0) {
-    await sequelize.query(`
-      CREATE UNIQUE INDEX uq_carritos_usuario_activo
-      ON carritos ((CASE WHEN activo = 1 THEN usuario_id ELSE NULL END))
-    `);
+    const createIndexSql =
+      dialect === 'postgres'
+        ? `
+          CREATE UNIQUE INDEX uq_carritos_usuario_activo
+          ON carritos (usuario_id)
+          WHERE activo = true
+        `
+        : `
+          CREATE UNIQUE INDEX uq_carritos_usuario_activo
+          ON carritos ((CASE WHEN activo = 1 THEN usuario_id ELSE NULL END))
+        `;
+
+    await sequelize.query(createIndexSql);
   }
 }
 

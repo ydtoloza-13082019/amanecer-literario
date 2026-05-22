@@ -41,7 +41,9 @@ app.get('/health', (req, res) => {
 
 app.get('/health/db', async (req, res) => {
   const requiredEnv = ['DB_HOST', 'DB_PORT', 'DB_NAME', 'DB_USER', 'DB_PASSWORD'];
-  const missingEnv = requiredEnv.filter((key) => !process.env[key]);
+  const missingEnv = process.env.DATABASE_URL
+    ? []
+    : requiredEnv.filter((key) => !process.env[key]);
 
   if (missingEnv.length > 0) {
     return res.status(503).json({

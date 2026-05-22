@@ -57,6 +57,15 @@ JWT_EXPIRES_IN=1d
 FRONTEND_URL=https://ydtoloza-13082019.github.io
 ```
 
+Para Supabase/PostgreSQL en Render, usa preferiblemente una sola variable:
+
+```env
+DATABASE_URL=postgresql://postgres:[PASSWORD]@[HOST]:5432/postgres
+JWT_SECRET=tu_clave_secreta
+JWT_EXPIRES_IN=1d
+FRONTEND_URL=https://ydtoloza-13082019.github.io
+```
+
 ## Instalacion
 
 ```bash
