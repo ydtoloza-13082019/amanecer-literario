@@ -1668,8 +1668,8 @@ header.header .nav-actions label.nav-actions__btn:hover svg {
 
 /* Estilo destacado exclusivo (Filtro Dorado) */
 .fair-badge.badge-highlight {
-  background: linear-gradient(135deg, var(--accent), #9e7843);
-  box-shadow: 0 4px 10px rgba(185, 146, 90, 0.3);
+  background: var(--primary);
+  box-shadow: 0 4px 10px var(--primary-dark);
 }
 
 /* Cuerpo de la tarjeta */
@@ -1691,7 +1691,7 @@ header.header .nav-actions label.nav-actions__btn:hover svg {
 }
 
 .fair-date {
-  color: var(--accent);
+  color: var(-- primary-dark);
   background: rgba(185, 146, 90, 0.08);
   padding: 4px 10px;
   border-radius: var(--radius-sm);
@@ -1850,25 +1850,26 @@ header.header .nav-actions label.nav-actions__btn:hover svg {
   }
 
   /* 4. CONTROL DE APERTURA (Cuando el checkbox #btn-menu está activado) */
-  .navbar #btn-menu:checked ~ .main-menu {
-  opacity: 1;
-  visibility: visible;
-  transform: translateY(0);
-}
+  /* #btn-menu es hermano del <header>, por eso usamos el selector desde body con ~ header .main-menu */
+  #btn-menu:checked ~ header .main-menu {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
 
-.navbar #btn-menu:checked ~ .btn-menu-trigger span:nth-child(1) {
-  transform: translateY(8px) rotate(45deg);
-  background-color: var(--accent);
-}
+  #btn-menu:checked ~ header .btn-menu-trigger span:nth-child(1) {
+    transform: translateY(8px) rotate(45deg);
+    background-color: var(--accent);
+  }
 
-.navbar #btn-menu:checked ~ .btn-menu-trigger span:nth-child(2) {
-  opacity: 0;
-}
+  #btn-menu:checked ~ header .btn-menu-trigger span:nth-child(2) {
+    opacity: 0;
+  }
 
-.navbar #btn-menu:checked ~ .btn-menu-trigger span:nth-child(3) {
-  transform: translateY(-8px) rotate(-45deg);
-  background-color: var(--accent);
-}
+  #btn-menu:checked ~ header .btn-menu-trigger span:nth-child(3) {
+    transform: translateY(-8px) rotate(-45deg);
+    background-color: var(--accent);
+  }
 
   /* Bloquear ligeramente el fondo para evitar scrolls extraños al estar abierto */
   body:has(#btn-menu:checked) {
@@ -2427,10 +2428,10 @@ header.header .nav-actions label.nav-actions__btn:hover svg {
   }
 
   .main-menu {
-  pointer-events: none;
-}
+    pointer-events: none;
+  }
 
-.navbar #btn-menu:checked ~ .main-menu {
-  pointer-events: auto;
-}
+  #btn-menu:checked ~ header .main-menu {
+    pointer-events: auto;
+  }
 }

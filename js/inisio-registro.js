@@ -7,7 +7,6 @@ document.addEventListener("DOMContentLoaded", function () {
   const loginPane = document.getElementById('login-pane');
   const registroPane = document.getElementById('registro-pane');
 
-  // Verificar que los elementos existan en el HTML antes de asignar el evento
   if (tabLogin && tabRegistro && loginPane && registroPane) {
     tabLogin.classList.add('active');
     tabRegistro.classList.remove('active');
@@ -39,14 +38,24 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 // ==========================================================
-// CONEXION CON API: LOGIN / REGISTRO
+// CONEXIÓN CON API: LOGIN / REGISTRO
 // ==========================================================
-const API_BASE_URL = window.AMANECER_API_URL || "https://amanecer-literario.onrender.com/api";
 
+// ✅ URL del backend en Railway
+const API_BASE_URL = "https://amanecer-literario-backend-production.up.railway.app/api";
+
+/**
+ * Función central para hacer peticiones al backend.
+ * Incluye el token JWT automáticamente si existe en localStorage.
+ */
 async function apiRequest(endpoint, options = {}) {
+  const token = localStorage.getItem("amanecerToken");
+
   const response = await fetch(`${API_BASE_URL}${endpoint}`, {
     headers: {
       "Content-Type": "application/json",
+      // Si hay un token guardado, lo enviamos en cada petición protegida
+      ...(token ? { "Authorization": `Bearer ${token}` } : {}),
       ...(options.headers || {})
     },
     ...options
@@ -55,25 +64,49 @@ async function apiRequest(endpoint, options = {}) {
   const data = await response.json().catch(() => ({}));
 
   if (!response.ok) {
-    throw new Error(data.message || "No se pudo completar la solicitud.");
+    throw new Error(data.message || `Error ${response.status}: No se pudo completar la solicitud.`);
   }
 
   return data;
 }
 
+/**
+ * Guarda el token y los datos del usuario en localStorage tras login/registro.
+ */
 function saveAuthSession(data) {
   if (data.token) {
     localStorage.setItem("amanecerToken", data.token);
   }
-
-  if (data.usuario) {
-    localStorage.setItem("amanecerUsuario", JSON.stringify(data.usuario));
+  // El backend puede devolver el usuario como "usuario" o como "user"
+  const usuario = data.usuario || data.user;
+  if (usuario) {
+    localStorage.setItem("amanecerUsuario", JSON.stringify(usuario));
   }
 }
 
+/**
+ * Cierra la sesión eliminando los datos del localStorage.
+ * Llama a esta función desde tu botón de "Cerrar sesión" si lo tienes.
+ */
+function cerrarSesion() {
+  localStorage.removeItem("amanecerToken");
+  localStorage.removeItem("amanecerUsuario");
+  // Opcional: recargar la página o redirigir
+  window.location.reload();
+}
+
+/**
+ * Devuelve true si hay un usuario con sesión activa.
+ */
+function estaAutenticado() {
+  return !!localStorage.getItem("amanecerToken");
+}
+
+/**
+ * Activa/desactiva el botón de submit mientras se procesa la petición.
+ */
 function setSubmitState(form, isLoading) {
   const button = form.querySelector('button[type="submit"]');
-
   if (!button) return;
 
   if (!button.dataset.originalText) {
@@ -84,10 +117,14 @@ function setSubmitState(form, isLoading) {
   button.textContent = isLoading ? "Procesando..." : button.dataset.originalText;
 }
 
+// ==========================================================
+// FORMULARIOS: LOGIN Y REGISTRO
+// ==========================================================
 document.addEventListener("DOMContentLoaded", function () {
   const loginForm = document.forms["form-login"];
   const registroForm = document.getElementById("form-registro");
 
+  // ---- LOGIN ----
   if (loginForm) {
     loginForm.addEventListener("submit", async (e) => {
       e.preventDefault();
@@ -103,25 +140,38 @@ document.addEventListener("DOMContentLoaded", function () {
         });
 
         saveAuthSession(data);
-        alert(data.message || "Inicio de sesion exitoso.");
-        document.getElementById("btn-cuenta").checked = false;
+        alert(data.message || "¡Inicio de sesión exitoso!");
+
+        // Cierra el panel de cuenta si existe
+        const btnCuenta = document.getElementById("btn-cuenta");
+        if (btnCuenta) btnCuenta.checked = false;
+
+        // Opcional: recargar para reflejar estado autenticado en el UI
+        // window.location.reload();
+
       } catch (error) {
-        alert(error.message);
+        alert("Error al iniciar sesión: " + error.message);
       } finally {
         setSubmitState(loginForm, false);
       }
     });
   }
 
+  // ---- REGISTRO ----
   if (registroForm) {
     registroForm.addEventListener("submit", async (e) => {
       e.preventDefault();
 
-      const password = registroForm.querySelector("#clave-registro").value;
-      const repeatedPassword = registroForm.querySelector("#clave-registro-repetida").value;
+      const password = registroForm.querySelector("#clave-registro")?.value;
+      const repeatedPassword = registroForm.querySelector("#clave-registro-repetida")?.value;
+
+      if (!password || !repeatedPassword) {
+        alert("Por favor completa todos los campos de contraseña.");
+        return;
+      }
 
       if (password !== repeatedPassword) {
-        alert("Las contrasenas no coinciden.");
+        alert("Las contraseñas no coinciden.");
         return;
       }
 
@@ -131,18 +181,21 @@ document.addEventListener("DOMContentLoaded", function () {
         const data = await apiRequest("/auth/register", {
           method: "POST",
           body: JSON.stringify({
-            nombre: registroForm.querySelector("#nombre-register").value.trim(),
-            email: registroForm.querySelector("#email-register").value.trim(),
+            nombre: registroForm.querySelector("#nombre-register")?.value.trim(),
+            email: registroForm.querySelector("#email-register")?.value.trim(),
             password
           })
         });
 
         saveAuthSession(data);
-        alert(data.message || "Cuenta creada correctamente.");
+        alert(data.message || "¡Cuenta creada correctamente!");
         registroForm.reset();
-        document.getElementById("btn-cuenta").checked = false;
+
+        const btnCuenta = document.getElementById("btn-cuenta");
+        if (btnCuenta) btnCuenta.checked = false;
+
       } catch (error) {
-        alert(error.message);
+        alert("Error al registrarse: " + error.message);
       } finally {
         setSubmitState(registroForm, false);
       }
@@ -151,10 +204,43 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 // ==========================================================
+// FUNCIONES PARA OBTENER LIBROS Y FERIAS DESDE EL BACKEND
+// Úsalas en cualquier otra página que las necesite.
+// ==========================================================
+
+/**
+ * Obtiene la lista de libros desde el backend.
+ * @returns {Promise<Array>} Lista de libros
+ */
+async function obtenerLibros() {
+  try {
+    const data = await apiRequest("/libros");
+    // El backend puede devolver { libros: [...] } o directamente un array
+    return data.libros || data || [];
+  } catch (error) {
+    console.error("Error al obtener libros:", error.message);
+    return [];
+  }
+}
+
+/**
+ * Obtiene la lista de ferias desde el backend.
+ * @returns {Promise<Array>} Lista de ferias
+ */
+async function obtenerFerias() {
+  try {
+    const data = await apiRequest("/ferias");
+    return data.ferias || data || [];
+  } catch (error) {
+    console.error("Error al obtener ferias:", error.message);
+    return [];
+  }
+}
+
+// ==========================================================
 // CONTROL DE CARRUSEL DINÁMICO Y ROTACIÓN DEL BANNER
 // ==========================================================
 document.addEventListener("DOMContentLoaded", () => {
-  // Definimos la lista de tus 3 banners con sus nombres exactos y sus respectivos títulos
   const coleccionBanners = [
     { imagen: "imagenes/baner1.jpg" },
     { imagen: "imagenes/banner2.png" },
@@ -164,27 +250,20 @@ document.addEventListener("DOMContentLoaded", () => {
   let indiceActual = 0;
   let temporizadorRotacion;
 
-  // Seleccionamos los elementos del HTML
   const elImagen = document.getElementById("mainBannerImage");
   const elBtnAtras = document.getElementById("bannerPrevBtn");
   const elBtnAdelante = document.getElementById("bannerNextBtn");
 
-  // Función encargada de hacer el cambio de contenido con una transición suave
- function actualizarBanner(nuevoIndice) {
-  if (!elImagen) return;
+  function actualizarBanner(nuevoIndice) {
+    if (!elImagen) return;
+    indiceActual = nuevoIndice;
+    elImagen.style.opacity = "0.3";
+    setTimeout(() => {
+      elImagen.src = coleccionBanners[indiceActual].imagen;
+      elImagen.style.opacity = "1";
+    }, 250);
+  }
 
-  indiceActual = nuevoIndice;
-
-  elImagen.style.opacity = "0.3";
-
-  setTimeout(() => {
-    elImagen.src = coleccionBanners[indiceActual].imagen;
-
-    elImagen.style.opacity = "1";
-  }, 250);
-}
-
-  // Funciones para avanzar y retroceder de posición
   function siguienteBanner() {
     let proximoIndice = (indiceActual + 1) % coleccionBanners.length;
     actualizarBanner(proximoIndice);
@@ -195,26 +274,22 @@ document.addEventListener("DOMContentLoaded", () => {
     actualizarBanner(proximoIndice);
   }
 
-  // Activa el temporizador automático para que rote cada 5 segundos solo
   function iniciarAutomático() {
     clearInterval(temporizadorRotacion);
     temporizadorRotacion = setInterval(siguienteBanner, 5000);
   }
 
-  // Escuchadores de clics para los botones de las flechas
   if (elBtnAdelante && elBtnAtras) {
     elBtnAdelante.addEventListener("click", () => {
       siguienteBanner();
-      iniciarAutomático(); // Resetea el tiempo para evitar que cambie de golpe
+      iniciarAutomático();
     });
-
     elBtnAtras.addEventListener("click", () => {
       anteriorBanner();
-      iniciarAutomático(); // Resetea el tiempo
+      iniciarAutomático();
     });
   }
 
-  // Encendemos la rotación automática al cargar la página
   iniciarAutomático();
 });
 
@@ -228,51 +303,35 @@ function initAutoCarousel() {
 
   if (!carousel) return;
 
-  let currentIndex = 0; // Guardamos el índice del libro actual en pantalla
+  let currentIndex = 0;
   const cards = carousel.querySelectorAll(".book-card");
   const totalCards = cards.length;
 
-  // Función principal: Desplaza la cinta Flexbox usando el transform de CSS
   const updateCarouselPosition = () => {
     if (totalCards === 0) return;
-    
-    // Medimos el ancho real de una tarjeta en el navegador
     const cardWidth = cards[0].getBoundingClientRect().width;
-    
-    // Leemos el gap (32px) configurado en tu CSS de forma dinámica
-    const computedGap = parseFloat(window.getComputedStyle(carousel).gap) || 32; 
-    
-    // Calculamos cuántos píxeles debemos trasladar la cinta hacia la izquierda
+    const computedGap = parseFloat(window.getComputedStyle(carousel).gap) || 32;
     const offset = currentIndex * (cardWidth + computedGap);
-    
-    // Aplicamos el movimiento continuo por hardware
     carousel.style.transform = `translateX(-${offset}px)`;
   };
 
-  // Función de avance automático (Bucle Infinito)
   const autoScrollNext = () => {
-    // Calculamos cuántas tarjetas caben visibles en el contenedor según la pantalla
     const cardsInView = Math.floor(carousel.parentElement.clientWidth / (60 + 32)) || 1;
-    
-    // Si ya llegamos al final de los libros, regresamos suavemente al inicio (0)
     if (currentIndex >= totalCards - cardsInView) {
-      currentIndex = 0; 
+      currentIndex = 0;
     } else {
-      currentIndex++; // Avanzamos un libro a la derecha
+      currentIndex++;
     }
     updateCarouselPosition();
   };
 
-  // PROGRAMACIÓN AUTOMÁTICA: Se ejecuta solo cada 3.5 segundos
   let autoScrollTimer = setInterval(autoScrollNext, 3500);
 
-  // Da 5 segundos de calma tras una interacción manual para que no salte toscamente
   const resetTimer = () => {
     clearInterval(autoScrollTimer);
-    autoScrollTimer = setInterval(autoScrollNext, 5000); 
+    autoScrollTimer = setInterval(autoScrollNext, 5000);
   };
 
-  // Flecha Siguiente (Derecha)
   if (nextBtn) {
     nextBtn.addEventListener("click", () => {
       const cardsInView = Math.floor(carousel.parentElement.clientWidth / (60 + 32)) || 1;
@@ -286,12 +345,11 @@ function initAutoCarousel() {
     });
   }
 
-  // Flecha Anterior (Izquierda)
   if (prevBtn) {
     prevBtn.addEventListener("click", () => {
       if (currentIndex <= 0) {
         const cardsInView = Math.floor(carousel.parentElement.clientWidth / (60 + 32)) || 1;
-        currentIndex = totalCards - cardsInView; // Si va hacia atrás desde el inicio, salta al final
+        currentIndex = totalCards - cardsInView;
       } else {
         currentIndex--;
       }
@@ -300,105 +358,66 @@ function initAutoCarousel() {
     });
   }
 
-  // PAUSA INTELIGENTE: Si el mouse entra al carrusel, congelamos la marcha automática
   carousel.addEventListener("mouseenter", () => clearInterval(autoScrollTimer));
-  
-  // Al quitar el cursor, el movimiento automático vuelve a marchar solo
   carousel.addEventListener("mouseleave", () => {
     clearInterval(autoScrollTimer);
     autoScrollTimer = setInterval(autoScrollNext, 3500);
   });
 
-  // RESPONSIVE: Si se cambia el tamaño de la pantalla, se recalculan las posiciones al instante
   window.addEventListener("resize", updateCarouselPosition);
 }
 
-// Asegúrate de inicializar la función al cargar el DOM si no lo habías hecho arriba
 document.addEventListener("DOMContentLoaded", () => {
   initAutoCarousel();
 });
 
 // ==========================================================================
-// LÓGICA DEL CARRUSEL libros destacados (SWIPER.JS)
+// LÓGICA DEL CARRUSEL DE LIBROS DESTACADOS (SWIPER.JS)
 // ==========================================================================
 if (typeof Swiper !== "undefined" && document.querySelector(".slider-wrapper")) {
   const swiper = new Swiper(".slider-wrapper", {
     loop: true,
-    spaceBetween: 20, // Espacio de 20px entre cada una de las 5 tarjetas
+    spaceBetween: 20,
     grabCursor: true,
-
-    // Paginación (Puntitos de abajo)
     pagination: {
       el: ".swiper-pagination",
       clickable: true,
       dynamicBullets: true,
     },
-
-    // Flechas de navegación (Asegúrate de que apunten a estas clases)
     navigation: {
       nextEl: ".swiper-button-next",
       prevEl: ".swiper-button-prev",
     },
-
-    // Puntos de ruptura para controlar cuántas tarjetas se ven
     breakpoints: {
-      0: {
-        slidesPerView: 1,
-      },
-      560: {
-        slidesPerView: 2,
-      },
-      768: {
-        slidesPerView: 3,
-      },
-      1024: {
-        slidesPerView: 4,
-      },
-      1200: {
-        slidesPerView: 5, // <--- Esto forzará las 5 tarjetas en pantallas grandes
-      }
+      0:    { slidesPerView: 1 },
+      560:  { slidesPerView: 2 },
+      768:  { slidesPerView: 3 },
+      1024: { slidesPerView: 4 },
+      1200: { slidesPerView: 5 },
     }
   });
 }
 
-
-/* =========================================
-   INTERACTIVIDAD ADAPTADA PARA LA GRID DUAL
-========================================= */
-
-/* =========================================
-   INTERACTIVIDAD ADAPTADA PARA LA GRID DUAL
-========================================= */
-
+// =========================================
+// INTERACTIVIDAD: NÚMEROS GLOBALES Y CONTACTO
+// =========================================
 const toggleBtn = document.getElementById("toggleNumbers");
 const numbersList = document.getElementById("numbersList");
 
 if (toggleBtn && numbersList) {
-
   toggleBtn.addEventListener("click", () => {
-
     numbersList.classList.toggle("show");
-
-    if (numbersList.classList.contains("show")) {
-      toggleBtn.textContent = "Hide global numbers";
-    } else {
-      toggleBtn.textContent = "View all global numbers";
-    }
-
+    toggleBtn.textContent = numbersList.classList.contains("show")
+      ? "Hide global numbers"
+      : "View all global numbers";
   });
-
 }
 
 const contactForm = document.querySelector(".contact-form");
-
 if (contactForm) {
   contactForm.addEventListener("submit", (e) => {
-
     e.preventDefault();
-
     alert("Mensaje enviado correctamente.");
-
     contactForm.reset();
-
   });
 }
