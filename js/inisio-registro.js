@@ -421,3 +421,9 @@ if (contactForm) {
     contactForm.reset();
   });
 }
+
+
+document.addEventListener("DOMContentLoaded", async () => {
+  const libros = await obtenerLibros();
+  console.log(libros); // ya tienes el array
+});
