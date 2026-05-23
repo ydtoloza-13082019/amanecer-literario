@@ -1668,8 +1668,9 @@ header.header .nav-actions label.nav-actions__btn:hover svg {
 
 /* Estilo destacado exclusivo (Filtro Dorado) */
 .fair-badge.badge-highlight {
-  background: var(--primary);
-  box-shadow: 0 4px 10px var(--primary-dark);
+  background: var(--primary-dark);
+  box-shadow: 0 4px 10px rgba(185, 146, 90, 0.3);
+  
 }
 
 /* Cuerpo de la tarjeta */
